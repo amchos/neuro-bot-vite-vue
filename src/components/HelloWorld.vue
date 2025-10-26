@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
+console.log('test')
 defineProps({
   msg: String,
 })
@@ -38,6 +39,6 @@ const count = ref(0)
 
 <style scoped>
 .read-the-docs {
-  color: #888;
+  color: #6d1717;
 }
 </style>
