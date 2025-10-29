@@ -11,10 +11,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <h1>Telegram WebApp InitData Test</h1>
-    <h2>{{ JSON.parse(user) }}</h2>
-    <h2>{{ user }}</h2>
-    <h2>{{ user.text }}</h2>
-  </div>
+
+    <div v-if="user">
+      <p><strong>ID:</strong> {{ user.id }}</p>
+      <p><strong>Имя:</strong> {{ user.first_name }}</p>
+      <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Язык:</strong> {{ user.language_code }}</p>
+    </div>
+
+    <div v-else>
+      <p>Нет данных — запусти внутри Telegram 📱</p>
+    </div>
 </template>
