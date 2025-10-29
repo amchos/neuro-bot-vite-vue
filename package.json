@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@twa-dev/sdk": "^8.0.2",
     "vue": "^3.5.22"
   },
   "devDependencies": {
