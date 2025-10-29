@@ -1,26 +1,45 @@
 <script setup>
-import WebApp from '@twa-dev/sdk'
 import { ref, onMounted } from 'vue'
+import WebApp from '@twa-dev/sdk'
 
-const user = ref(null)
+const allData = ref({})
+
 onMounted(() => {
-  console.log('initData:', WebApp.initData)
-  console.log('initDataUnsafe:', WebApp.initDataUnsafe)
-  user.value = WebApp.initDataUnsafe.user
+  WebApp.ready() // обязательно — сообщает Telegram, что WebApp загрузился
+
+  // Получаем все данные из Telegram
+  const data = {
+    initData: WebApp.initData,
+    initDataUnsafe: WebApp.initDataUnsafe,
+    themeParams: WebApp.themeParams,
+    colorScheme: WebApp.colorScheme,
+    viewportHeight: WebApp.viewportHeight,
+    viewportStableHeight: WebApp.viewportStableHeight,
+    isExpanded: WebApp.isExpanded,
+    platform: WebApp.platform,
+    version: WebApp.version,
+    headerColor: WebApp.headerColor,
+    backgroundColor: WebApp.backgroundColor,
+  }
+
+  allData.value = data
+
+  console.log('Все данные Telegram WebApp:', data)
 })
 </script>
 
 <template>
-
-    <div v-if="user">
-      <p><strong>ID:</strong> {{ user.id }}</p>
-      <p><strong>Имя:</strong> {{ user.first_name }}</p>
-      <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Язык:</strong> {{ user.language_code }}</p>
-    </div>
-
-    <div v-else>
-      <p>Нет данных — запусти внутри Telegram 📱</p>
-    </div>
+  <div class="container">
+    <h1>📦 Все данные Telegram WebApp</h1>
+    <pre>{{ allData }}</pre>
+  </div>
 </template>
+
+<style scoped>
+.container {
+  font-family: monospace;
+  padding: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+</style>
