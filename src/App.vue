@@ -28,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="allData.initData" class="container">
     <h1>📦 Все данные Telegram WebApp</h1>
     <pre>{{ allData }}</pre>
   </div>
