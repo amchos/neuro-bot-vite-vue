@@ -6,7 +6,6 @@ const allData = ref({})
 
 onMounted(() => {
   WebApp.ready() // обязательно — сообщает Telegram, что WebApp загрузился
-
   // Получаем все данные из Telegram
   const data = {
     initData: WebApp.initData,
@@ -33,6 +32,8 @@ onMounted(() => {
     <h1>📦 Все данные Telegram WebApp</h1>
     <pre>{{ allData }}</pre>
   </div>
+
+  <div v-if="allData.initData === ''"> <a href="https://t.me/test_of_testbot">Open the bot in telegram</a></div>
 </template>
 
 <style scoped>
