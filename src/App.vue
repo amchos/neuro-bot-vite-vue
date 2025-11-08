@@ -25,7 +25,7 @@ onMounted(() => {
 
   console.log('Все данные Telegram WebApp:', data)
   // Отправляем initData на сервер
-  fetch('https://promptly.webhop.me/users/auth/telegram/', {
+  fetch('https://promptly.webhop.me/users/auth/telegram', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
