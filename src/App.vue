@@ -37,14 +37,14 @@ onMounted(() => {
   })
     .then(async (response) => {
       const result = await response.json()
-      responseTest.value = `Успешно. Ответ сервера:, ${result.toString()}`
+      responseTest.value = `Успешно. Ответ сервера:, ${JSON.stringify(result)}`
       console.log(typeof WebApp.initData); // 'string'
       console.log(WebApp.initData.includes('hash=')); // true
       console.log('Успешно. Ответ сервера:', result)
 
     })
     .catch((error) => {
-      responseTest.value = `фейл. Ошибка при авторизации через Telegram:, ${error.toString()}`
+      responseTest.value = `фейл. Ошибка при авторизации через Telegram:, ${JSON.stringify(error)}`
       console.log(typeof WebApp.initData); // 'string'
       console.log(WebApp.initData.includes('hash=')); // true
       console.error('фейл. Ошибка при авторизации через Telegram:', error)
