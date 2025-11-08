@@ -24,6 +24,26 @@ onMounted(() => {
   allData.value = data
 
   console.log('Все данные Telegram WebApp:', data)
+  // Отправляем initData на сервер
+  fetch('https://promptly.webhop.me/users/auth/telegram/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      initData: WebApp.initData, // строка с hash и user данными
+    }),
+  })
+    .then(async (response) => {
+      const result = await response.json()
+      console.log('Ответ сервера:', result)
+    })
+    .catch((error) => {
+      console.error('Ошибка при авторизации через Telegram:', error)
+    })
+
+
+
 })
 </script>
 
