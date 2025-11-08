@@ -11,15 +11,15 @@ onMounted(() => {
   const data = {
     initData: WebApp.initData,
     initDataUnsafe: WebApp.initDataUnsafe,
-    themeParams: WebApp.themeParams,
-    colorScheme: WebApp.colorScheme,
-    viewportHeight: WebApp.viewportHeight,
-    viewportStableHeight: WebApp.viewportStableHeight,
-    isExpanded: WebApp.isExpanded,
-    platform: WebApp.platform,
-    version: WebApp.version,
-    headerColor: WebApp.headerColor,
-    backgroundColor: WebApp.backgroundColor,
+    // themeParams: WebApp.themeParams,
+    // colorScheme: WebApp.colorScheme,
+    // viewportHeight: WebApp.viewportHeight,
+    // viewportStableHeight: WebApp.viewportStableHeight,
+    // isExpanded: WebApp.isExpanded,
+    // platform: WebApp.platform,
+    // version: WebApp.version,
+    // headerColor: WebApp.headerColor,
+    // backgroundColor: WebApp.backgroundColor,
   }
 
   allData.value = data
