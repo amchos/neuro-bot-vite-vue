@@ -10,7 +10,7 @@ onMounted(() => {
   // Получаем все данные из Telegram
   const data = {
     initData: WebApp.initData,
-    // initDataUnsafe: WebApp.initDataUnsafe,
+    initDataUnsafe: WebApp.initDataUnsafe,
     // themeParams: WebApp.themeParams,
     // colorScheme: WebApp.colorScheme,
     // viewportHeight: WebApp.viewportHeight,
