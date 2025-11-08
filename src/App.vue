@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import WebApp from '@twa-dev/sdk'
 
 const allData = ref({})
-let response = ref('')
+let responseTest = ref('test')
 
 onMounted(() => {
   WebApp.ready() // обязательно — сообщает Telegram, что WebApp загрузился
@@ -37,12 +37,12 @@ onMounted(() => {
   })
     .then(async (response) => {
       const result = await response.json()
-      response = `Успешно. Ответ сервера:', ${result}`
+      responseTest = `Успешно. Ответ сервера:', ${result}`
       console.log('Успешно. Ответ сервера:', result)
 
     })
     .catch((error) => {
-      response = `фейл. Ошибка при авторизации через Telegram:, ${error}`
+      responseTest = `фейл. Ошибка при авторизации через Telegram:, ${error}`
       console.error('фейл. Ошибка при авторизации через Telegram:', error)
     })
 
@@ -54,7 +54,7 @@ onMounted(() => {
 <template>
   <div v-if="allData.initData" class="container">
     <h1>Ответ сервера</h1>
-    <pre>{{ response }}</pre>
+    <pre>{{ responseTest }}</pre>
   </div>
 
   <div v-if="allData.initData === ''"> <a href="https://t.me/test_of_testbot">Open the bot in telegram</a></div>
