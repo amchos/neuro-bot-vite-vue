@@ -37,7 +37,7 @@ onMounted(() => {
   })
     .then(async (response) => {
       const result = await response.json()
-      responseTest.value = `Успешно. Ответ сервера:, ${result.toString}`
+      responseTest.value = `Успешно. Ответ сервера:, ${result.toString()}`
       console.log(typeof WebApp.initData); // 'string'
       console.log(WebApp.initData.includes('hash=')); // true
       console.log('Успешно. Ответ сервера:', result)
