@@ -90,6 +90,7 @@ onMounted(() => {
 .container {
   padding: 20px;
   font-family: system-ui;
+  color: black;
 }
 
 .status {
