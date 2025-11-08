@@ -36,10 +36,11 @@ onMounted(() => {
   })
     .then(async (response) => {
       const result = await response.json()
-      console.log('Ответ сервера:', result)
+      console.log('Успешно. Ответ сервера:', result)
+
     })
     .catch((error) => {
-      console.error('Ошибка при авторизации через Telegram:', error)
+      console.error('фейл. Ошибка при авторизации через Telegram:', error)
     })
 
 
