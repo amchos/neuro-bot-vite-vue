@@ -58,6 +58,8 @@ onMounted(() => {
   <div v-if="allData.initData" class="container">
     <h1>Ответ сервера</h1>
     <pre>{{ responseTest }}</pre>
+    <h2>InitData</h2>
+    <pre>{{ allData }}</pre>
   </div>
 
   <div v-if="allData.initData === ''"> <a href="https://t.me/test_of_testbot">Open the bot in telegram</a></div>
