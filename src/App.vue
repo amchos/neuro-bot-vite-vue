@@ -37,12 +37,12 @@ onMounted(() => {
   })
     .then(async (response) => {
       const result = await response.json()
-      responseTest.value = `Успешно. Ответ сервера:, ${result}`
+      responseTest.value = `Успешно. Ответ сервера:, ${result.toString}`
       console.log('Успешно. Ответ сервера:', result)
 
     })
     .catch((error) => {
-      responseTest.value = `фейл. Ошибка при авторизации через Telegram:, ${error}`
+      responseTest.value = `фейл. Ошибка при авторизации через Telegram:, ${error.toString()}`
       console.error('фейл. Ошибка при авторизации через Telegram:', error)
     })
 
