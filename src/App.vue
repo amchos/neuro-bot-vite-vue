@@ -3,28 +3,32 @@ import { ref, onMounted } from 'vue'
 import WebApp from '@twa-dev/sdk'
 
 const allData = ref({})
-let responseTest = ref('test')
+const responseTest = ref('Загрузка...')
 
 onMounted(() => {
-  WebApp.ready() // обязательно — сообщает Telegram, что WebApp загрузился
+  WebApp.ready()
+  
   // Получаем все данные из Telegram
   const data = {
     initData: WebApp.initData,
     initDataUnsafe: WebApp.initDataUnsafe,
-    // themeParams: WebApp.themeParams,
-    // colorScheme: WebApp.colorScheme,
-    // viewportHeight: WebApp.viewportHeight,
-    // viewportStableHeight: WebApp.viewportStableHeight,
-    // isExpanded: WebApp.isExpanded,
-    // platform: WebApp.platform,
-    // version: WebApp.version,
-    // headerColor: WebApp.headerColor,
-    // backgroundColor: WebApp.backgroundColor,
   }
 
   allData.value = data
 
-  console.log('Все данные Telegram WebApp:', data)
+  console.log('=== ДИАГНОСТИКА ===')
+  console.log('initData exists:', !!WebApp.initData)
+  console.log('initData length:', WebApp.initData?.length)
+  console.log('initData:', WebApp.initData)
+  console.log('Parsed initDataUnsafe:', WebApp.initDataUnsafe)
+
+  // Проверка наличия initData
+  if (!WebApp.initData) {
+    responseTest.value = 'Ошибка: initData отсутствует. Откройте приложение через Telegram!'
+    console.error('WebApp.initData пустой')
+    return
+  }
+
   // Отправляем initData на сервер
   fetch('https://promptly.webhop.me/users/auth/telegram/', {
     method: 'POST',
@@ -32,44 +36,79 @@ onMounted(() => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      initData: WebApp.initData, // строка с hash и user данными
+      initData: WebApp.initData,
     }),
   })
     .then(async (response) => {
       const result = await response.json()
-      responseTest.value = `Успешно. Ответ сервера:, ${JSON.stringify(result)}`
-      console.log(typeof WebApp.initData); // 'string'
-      console.log(WebApp.initData.includes('hash=')); // true
-      console.log('Успешно. Ответ сервера:', result)
-
+      
+      // ✅ ВАЖНО: проверяем статус И содержимое ответа
+      if (!response.ok || result.error) {
+        throw new Error(result.error || `HTTP ${response.status}`)
+      }
+      
+      responseTest.value = `✅ Успешно! Ответ: ${JSON.stringify(result)}`
+      console.log('✅ Успешная авторизация:', result)
+      
+      // Здесь можно сохранить токен, перенаправить пользователя и т.д.
+      // localStorage.setItem('token', result.token)
     })
     .catch((error) => {
-      responseTest.value = `фейл. Ошибка при авторизации через Telegram:, ${JSON.stringify(error)}`
-      console.log(typeof WebApp.initData); // 'string'
-      console.log(WebApp.initData.includes('hash=')); // true
-      console.error('фейл. Ошибка при авторизации через Telegram:', error)
+      responseTest.value = `❌ Ошибка авторизации: ${error.message}`
+      console.error('❌ Ошибка при авторизации:', error)
+      
+      // Дополнительная диагностика
+      console.log('Проверьте:')
+      console.log('1. Bot token на сервере корректный?')
+      console.log('2. Приложение открыто через Telegram?')
+      console.log('3. initData содержит hash?', WebApp.initData?.includes('hash='))
     })
-
-
 })
 </script>
 
 <template>
-  <div v-if="allData.initData" class="container">
-    <h1>Ответ сервера</h1>
-    <pre>{{ responseTest }}</pre>
-    <h2>InitData</h2>
-    <pre>{{ allData }}</pre>
+  <div class="container">
+    <h1>Telegram Web App Auth</h1>
+    
+    <div class="status">
+      <h2>Статус:</h2>
+      <p>{{ responseTest }}</p>
+    </div>
+    
+    <div class="debug">
+      <h2>Debug Info:</h2>
+      <pre>{{ JSON.stringify(allData, null, 2) }}</pre>
+    </div>
+      <div>
+        <p>initData length: {{ allData.initData?.length }}</p>
+        <p>Has hash: {{ allData.initData?.includes('hash=') }}</p>
+    </div>
   </div>
-
-  <div v-if="allData.initData === ''"> <a href="https://t.me/test_of_testbot">Open the bot in telegram</a></div>
 </template>
 
 <style scoped>
 .container {
-  font-family: monospace;
   padding: 20px;
-  white-space: pre-wrap;
-  word-break: break-word;
+  font-family: system-ui;
+}
+
+.status {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.debug {
+  margin: 20px 0;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+pre {
+  overflow-x: auto;
+  font-size: 12px;
 }
 </style>
