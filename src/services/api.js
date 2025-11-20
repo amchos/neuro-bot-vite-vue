@@ -49,14 +49,29 @@ class ApiService {
     async authenticateTelegram() {
         const initData = telegramService.getInitData();
 
+        // Development mode: use mock data if no initData
+        if (!initData && import.meta.env.DEV) {
+            console.log('🔧 Development mode: using mock authentication');
+            return this.mockAuthenticate();
+        }
+
         if (!initData) {
             throw new Error('Telegram initData отсутствует');
         }
 
         try {
-            const response = await api.post('/users/auth/telegram/', {
-                initData,
+            console.log('🔐 Authenticating with backend...', {
+                url: '/users/auth/telegram/',
+                hasInitData: !!initData,
+                initDataLength: initData.length
             });
+
+            // CRITICAL FIX: Django backend expects snake_case (init_data)
+            const response = await api.post('/users/auth/telegram/', {
+                init_data: initData,
+            });
+
+            console.log('✅ Authentication successful:', response.data);
 
             // Сохраняем токен если есть
             if (response.data.token) {
@@ -65,13 +80,52 @@ class ApiService {
 
             return response.data;
         } catch (error) {
+            // Extract meaningful error message from backend
+            const errorMessage = error.response?.data?.error
+                || error.response?.data?.detail
+                || error.response?.data?.message
+                || error.message;
+
+            // Log full error details for debugging
+            console.error('❌ Auth Error Details:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                headers: error.response?.headers,
+                url: error.response?.config?.url,
+            });
+
             // Проверяем, не вернул ли сервер HTML вместо JSON
             if (error.response?.headers['content-type']?.includes('text/html')) {
                 throw new Error(`Сервер вернул HTML вместо JSON. Status: ${error.response.status}`);
             }
 
-            throw error;
+            throw new Error(errorMessage);
         }
+    }
+
+    /**
+     * Mock authentication for development
+     */
+    async mockAuthenticate() {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        const mockUser = {
+            id: 123456789,
+            first_name: 'Test',
+            last_name: 'User',
+            username: 'testuser',
+            balance: 1000,
+        };
+
+        // Save mock token
+        localStorage.setItem('auth_token', 'mock-token-dev');
+
+        return {
+            user: mockUser,
+            token: 'mock-token-dev'
+        };
     }
 
     /**

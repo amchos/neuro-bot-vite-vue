@@ -72,16 +72,24 @@ export const useAppStore = defineStore('app', {
             } catch (error) {
                 console.error('❌ Ошибка авторизации:', error);
 
+                // Show actual error message from backend
                 this.authError = error.message || 'Ошибка авторизации';
                 this.isAuthenticated = false;
 
-                // Сохраняем debug информацию
+                // Enhanced debug info with actual backend response
                 if (error.response) {
                     this.debugInfo = {
                         status: error.response.status,
                         statusText: error.response.statusText,
-                        headers: error.response.headers,
+                        data: error.response.data, // Show actual backend response
                         url: error.response.config?.url,
+                        method: error.response.config?.method,
+                    };
+                } else {
+                    // Network error or no response
+                    this.debugInfo = {
+                        message: error.message,
+                        type: 'Network Error or No Response',
                     };
                 }
 
