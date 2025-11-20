@@ -63,7 +63,12 @@ class ApiService {
             console.log('🔐 Authenticating with backend...', {
                 url: '/users/auth/telegram/',
                 hasInitData: !!initData,
-                initDataLength: initData.length
+                initDataLength: initData.length,
+                initDataPreview: initData.substring(0, 100) + '...'
+            });
+
+            console.log('📤 Sending to backend:', {
+                init_data: initData
             });
 
             // CRITICAL FIX: Django backend expects snake_case (init_data)
