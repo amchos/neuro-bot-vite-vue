@@ -4,6 +4,7 @@ import gptIcon from '@/assets/icons/gpt-icon.svg'
 import claudeIcon from '@/assets/icons/claude-icon.svg'
 import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
+import grokIcon from '@/assets/icons/grok-icon.svg'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -88,6 +89,7 @@ const handleSelect = () => {
             <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="64" height="64" />
             <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="64" height="64" />
             <img v-else-if="model.icon === 'gemini'" width="64" height="64" :src="geminiIcon">
+            <img v-else-if="model.icon === 'grok'" :src="grokIcon" alt="grok icon">
             <img v-else width="64" height="64" :src="deepseekIcon">
           </div>
           

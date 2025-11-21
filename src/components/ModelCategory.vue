@@ -3,6 +3,7 @@ import gptIcon from '@/assets/icons/gpt-icon.svg'
 import claudeIcon from '@/assets/icons/claude-icon.svg'
 import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
+import grokIcon from '@/assets/icons/grok-icon.svg'
 
 defineProps({
   category: {
@@ -38,6 +39,7 @@ const onSelectModel = (model) => {
           <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="24" height="24" />
           <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="24" height="24" />
           <img v-else-if="model.icon === 'gemini'" width="24" height="24" :src="geminiIcon">
+          <img v-else-if="model.icon === 'grok'" :src="grokIcon" alt="grok icon">
           <img v-else width="24" height="24" :src="deepseekIcon">
         </div>
         <span class="model-name">{{ model.name }}</span>
