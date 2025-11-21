@@ -97,26 +97,25 @@ const handleInvite = () => {
 }
 
 .content-wrapper {
-  flex: 1;
+  /* flex: 1; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 40px;
 }
 
 .header-icon {
   width: 80px;
   height: 80px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .title {
   font-size: 20px;
   font-weight: 500;
   text-align: center;
-  line-height: 1.4;
-  margin-bottom: 24px;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
 .arrow-icon {
@@ -131,7 +130,7 @@ const handleInvite = () => {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -156,7 +155,7 @@ const handleInvite = () => {
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
   transition: opacity 0.2s;
 }
 
@@ -167,7 +166,7 @@ const handleInvite = () => {
 .rewards-section {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   align-items: center;
   text-align: center;
 }

@@ -1,18 +1,18 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import ProBanner from '@/components/ProBanner.vue'
-import settingsIcon from '@/assets/icons/settings-icon.svg'
+import neuroSettingsIcon from '@/assets/icons/neuro-settings-icon.svg'
 import historyIcon from '@/assets/icons/history-main-icon.svg'
 import addHomeIcon from '@/assets/icons/add-home-icon.svg'
 import botChannelIcon from '@/assets/icons/bot-channel-icon.svg'
-import newsChannelIcon from '@/assets/icons/referal-main-icon.svg' // Placeholder as per plan
+import newsChannelIcon from '@/assets/icons/referal-menu-icon.svg'
 import supportIcon from '@/assets/icons/support-icon.svg'
-import arrowIcon from '@/assets/icons/arrow-icon.svg'
+import settingsArrowIcon from '@/assets/icons/settings-arrow-icon.svg'
 
 const router = useRouter()
 
 const menuItems = [
-  { id: 'settings', title: 'Настройки нейросети', icon: settingsIcon, route: '/settings' },
+  { id: 'settings', title: 'Настройки нейросети', icon: neuroSettingsIcon, route: '/settings' },
   { id: 'history', title: 'История операций', icon: historyIcon, route: '/history' },
   { id: 'add-home', title: 'Добавить на экран "Домой"', icon: addHomeIcon, action: 'addToHome' },
   { id: 'channel', title: 'Канал бота', icon: botChannelIcon, url: 'https://t.me/bot_channel' },
@@ -56,7 +56,7 @@ const handleItemClick = (item) => {
             <span class="item-title">{{ item.title }}</span>
           </div>
           <div class="item-right">
-            <img :src="arrowIcon" alt=">" width="16" height="16" class="arrow-right" />
+            <img :src="settingsArrowIcon" alt=">" width="11" height="12" class="arrow-right" />
           </div>
         </button>
       </div>
@@ -70,7 +70,7 @@ const handleItemClick = (item) => {
         >
           <span class="item-title">{{ item.title }}</span>
           <div class="item-right">
-            <img :src="arrowIcon" alt=">" width="16" height="16" class="arrow-right" />
+            <img :src="settingsArrowIcon" alt=">" width="11" height="12" class="arrow-right" />
           </div>
         </button>
       </div>
@@ -143,6 +143,5 @@ const handleItemClick = (item) => {
 
 .arrow-right {
   opacity: 0.5;
-  transform: rotate(-90deg); /* Assuming arrow-icon points down or up, adjusting to point right */
 }
 </style>
