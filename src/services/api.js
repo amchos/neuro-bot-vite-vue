@@ -61,7 +61,7 @@ class ApiService {
 
         try {
             console.log('🔐 Authenticating with backend...', {
-                url: '/users/auth/telegram/',
+                url: '/users/auth/telegram',
                 hasInitData: !!initData,
                 initDataLength: initData.length,
                 initDataPreview: initData.substring(0, 100) + '...'
