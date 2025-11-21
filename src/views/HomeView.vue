@@ -157,7 +157,7 @@ const handleSelectModel = (model) => {
     <div class="fixed-header">
       <!-- Header / Top Bar -->
       <div class="top-bar">
-        <button class="icon-button menu-button">
+        <button class="icon-button menu-button" @click="router.push('/menu')">
           <img :src="settingsIcon" alt="Menu" width="24" height="24" />
         </button>
       </div>

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useAppStore } from '@/stores/app';
 import HomeView from '@/views/HomeView.vue';
 import InviteView from '@/views/InviteView.vue';
+import MenuView from '@/views/MenuView.vue';
 
 const routes = [
     {
@@ -14,6 +15,12 @@ const routes = [
         path: '/invite',
         name: 'invite',
         component: InviteView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/menu',
+        name: 'menu',
+        component: MenuView,
         meta: { requiresAuth: true },
     },
     // Добавьте другие маршруты здесь

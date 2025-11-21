@@ -1,13 +1,31 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useAppStore } from '@/stores/app'
+import { useRouter, useRoute } from 'vue-router'
+import telegramService from '@/services/telegram'
 
 const appStore = useAppStore()
+const router = useRouter()
+const route = useRoute()
 
 onMounted(async () => {
   // Инициализируем приложение (Telegram + авторизация)
   await appStore.init()
 })
+
+// Управление кнопкой "Назад"
+watch(
+  () => route.name,
+  (newRouteName) => {
+    if (newRouteName && newRouteName !== 'home') {
+      telegramService.showBackButton(() => {
+        router.back()
+      })
+    } else {
+      telegramService.hideBackButton()
+    }
+  }
+)
 </script>
 
 <template>
