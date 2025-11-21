@@ -53,6 +53,38 @@ const onTouchMove = (e) => {
 }
 
 const onTouchEnd = () => {
+  handleDragEnd()
+}
+
+// Mouse events
+const onMouseDown = (e) => {
+  touchStartY.value = e.clientY
+  isDragging.value = true
+}
+
+const onMouseMove = (e) => {
+  if (!isDragging.value) return
+  
+  touchCurrentY.value = e.clientY
+  const diff = touchCurrentY.value - touchStartY.value
+  
+  // Only allow dragging downwards
+  if (diff > 0) {
+    modalTranslateY.value = diff
+  }
+}
+
+const onMouseUp = () => {
+  handleDragEnd()
+}
+
+const onMouseLeave = () => {
+  if (isDragging.value) {
+    handleDragEnd()
+  }
+}
+
+const handleDragEnd = () => {
   isDragging.value = false
   
   // Threshold to close (e.g., 100px)
@@ -78,6 +110,10 @@ const handleSelect = () => {
         @touchstart="onTouchStart"
         @touchmove="onTouchMove"
         @touchend="onTouchEnd"
+        @mousedown="onMouseDown"
+        @mousemove="onMouseMove"
+        @mouseup="onMouseUp"
+        @mouseleave="onMouseLeave"
         :style="{ transform: `translateY(${modalTranslateY}px)` }"
       >
         <div class="modal-handle-bar">
