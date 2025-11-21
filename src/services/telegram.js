@@ -28,7 +28,7 @@ class TelegramService {
     this.tg.expand();
     
     // Включаем подтверждение при закрытии
-    this.tg.enableClosingConfirmation();
+    // this.tg.enableClosingConfirmation();
     
     // Применяем цвета темы
     this.applyTheme();
