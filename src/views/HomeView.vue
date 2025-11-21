@@ -7,10 +7,15 @@ import gptIcon from '@/assets/icons/gpt-icon.svg'
 import claudeIcon from '@/assets/icons/claude-icon.svg'
 import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
+
 const appStore = useAppStore()
 
 // Computed properties
 const userBalance = computed(() => appStore.userBalance || 0)
+
+// Modal State
+const isModalOpen = ref(false)
+const selectedModel = ref(null)
 
 // Mock Data for Models (matching the screenshot)
 const modelCategories = ref([
@@ -18,29 +23,95 @@ const modelCategories = ref([
     title: 'Быстрые',
     cost: 0,
     items: [
-      { id: 'gpt-5-nano', name: 'GPT-5 nano', icon: 'gpt' },
-      { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash-Lite', icon: 'gemini' },
-      { id: 'grok-3-mini', name: 'Grok 3 Mini', icon: 'grok' }
+      { 
+        id: 'gpt-5-nano', 
+        name: 'GPT-5 nano', 
+        icon: 'gpt',
+        company: 'OpenAI',
+        description: 'Младшая модель семейства GPT-5; приоритет — минимальная задержка и низкая стоимость.'
+      },
+      { 
+        id: 'gemini-2.5-flash-lite', 
+        name: 'Gemini 2.5 Flash-Lite', 
+        icon: 'gemini',
+        company: 'Google',
+        description: 'Легкая и быстрая модель от Google, оптимизированная для простых задач.'
+      },
+      { 
+        id: 'grok-3-mini', 
+        name: 'Grok 3 Mini', 
+        icon: 'grok',
+        company: 'xAI',
+        description: 'Компактная версия Grok, предназначенная для быстрых ответов.'
+      }
     ]
   },
   {
     title: 'Базовые',
     cost: 1,
     items: [
-      { id: 'gpt-5-mini', name: 'GPT-5 Mini', icon: 'gpt' },
-      { id: 'claude-haiku-3.5', name: 'Claude Haiku 3.5', icon: 'claude' },
-      { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', icon: 'gemini' },
-      { id: 'deepseek-v3.1', name: 'DeepSeek V3.1', icon: 'deepseek' }
+      { 
+        id: 'gpt-5-mini', 
+        name: 'GPT-5 Mini', 
+        icon: 'gpt',
+        company: 'OpenAI',
+        description: 'Сбалансированная модель для повседневных задач.'
+      },
+      { 
+        id: 'claude-haiku-3.5', 
+        name: 'Claude Haiku 3.5', 
+        icon: 'claude',
+        company: 'Anthropic',
+        description: 'Быстрая и эффективная модель от Anthropic.'
+      },
+      { 
+        id: 'gemini-2.5-flash', 
+        name: 'Gemini 2.5 Flash', 
+        icon: 'gemini',
+        company: 'Google',
+        description: 'Универсальная модель с высокой скоростью работы.'
+      },
+      { 
+        id: 'deepseek-v3.1', 
+        name: 'DeepSeek V3.1', 
+        icon: 'deepseek',
+        company: 'DeepSeek',
+        description: 'Мощная открытая модель для кода и текста.'
+      }
     ]
   },
   {
     title: 'Умные',
     cost: 2,
     items: [
-      { id: 'gpt-5', name: 'GPT-5', icon: 'gpt' },
-      { id: 'claude-sonnet-4', name: 'Claude Sonnet 4', icon: 'claude' },
-      { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', icon: 'gemini' },
-      { id: 'grok-4', name: 'Grok 4', icon: 'grok' }
+      { 
+        id: 'gpt-5', 
+        name: 'GPT-5', 
+        icon: 'gpt',
+        company: 'OpenAI',
+        description: 'Флагманская модель с передовыми возможностями рассуждения.'
+      },
+      { 
+        id: 'claude-sonnet-4', 
+        name: 'Claude Sonnet 4', 
+        icon: 'claude',
+        company: 'Anthropic',
+        description: 'Продвинутая модель для сложных аналитических задач.'
+      },
+      { 
+        id: 'gemini-2.5-pro', 
+        name: 'Gemini 2.5 Pro', 
+        icon: 'gemini',
+        company: 'Google',
+        description: 'Профессиональная модель для мультимодальных задач.'
+      },
+      { 
+        id: 'grok-4', 
+        name: 'Grok 4', 
+        icon: 'grok',
+        company: 'xAI',
+        description: 'Самая мощная модель от xAI с доступом к реальным данным.'
+      }
     ]
   }
 ])
@@ -48,22 +119,33 @@ const modelCategories = ref([
 // Actions
 const handleTopUp = () => {
   console.log('Top up clicked')
-  // TODO: Implement top up logic
 }
 
 const handleChats = () => {
   console.log('Chats clicked')
-  // TODO: Navigate to chats
 }
 
 const handleInvite = () => {
   console.log('Invite clicked')
-  // TODO: Implement invite logic
 }
 
 const handleModelSelect = (model) => {
-  console.log('Selected model:', model)
-  // TODO: Navigate to chat with model
+  selectedModel.value = model
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  // Delay clearing selected model to allow animation to finish
+  setTimeout(() => {
+    selectedModel.value = null
+  }, 300)
+}
+
+const handleSelectModel = () => {
+  console.log('Selected model for chat:', selectedModel.value)
+  closeModal()
+  // TODO: Navigate to chat
 }
 </script>
 
@@ -82,10 +164,12 @@ const handleModelSelect = (model) => {
 
     <!-- Balance Section -->
     <div class="balance-section">
-      <div class="balance-icon">
-        <img :src="balanceIcon" alt="Balance" width="40" height="40" />
+      <div class="balance-section-wrapper">
+        <div class="balance-icon">
+          <img :src="balanceIcon" alt="Balance" width="100%" height="100%" />
+        </div>
+        <div class="balance-amount">{{ userBalance }}</div>
       </div>
-      <div class="balance-amount">{{ userBalance }}</div>
       <div class="balance-label">Баланс</div>
     </div>
 
@@ -156,26 +240,10 @@ const handleModelSelect = (model) => {
         <div class="models-grid">
           <div v-for="model in category.items" :key="model.id" class="model-item" @click="handleModelSelect(model)">
             <div class="model-icon-wrapper">
-              <!-- Placeholder Icons based on model type -->
-              <!-- <svg v-if="model.icon === 'gpt'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20Z" fill="white"/>
-              </svg> -->
-
               <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="24" height="24" />
               <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="24" height="24" />
               <img v-else-if="model.icon === 'gemini'" width="24" height="24" :src="geminiIcon">
               <img v-else width="24" height="24" :src="deepseekIcon">
-
-              <!-- <svg v-else-if="model.icon === 'gemini'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white"/>
-              </svg> -->
-              <!-- <svg v-else-if="model.icon === 'claude'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
-                <path d="M12 6V18M6 12H18" stroke="white" stroke-width="2"/>
-              </svg> -->
-              <!-- <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 12L12 22L22 12L12 2Z" stroke="white" stroke-width="2"/>
-              </svg> -->
             </div>
             <span class="model-name">{{ model.name }}</span>
             <button class="model-more">
@@ -189,6 +257,43 @@ const handleModelSelect = (model) => {
         </div>
       </div>
     </div>
+
+    <!-- Model Details Modal -->
+    <Transition name="modal">
+      <div v-if="isModalOpen" class="modal-backdrop" @click="closeModal">
+        <div class="modal-content" @click.stop>
+          <div class="modal-handle-bar">
+            <div class="modal-handle"></div>
+          </div>
+          
+          <div v-if="selectedModel" class="modal-body">
+            <div class="modal-icon-large">
+              <img v-if="selectedModel.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="64" height="64" />
+              <img v-else-if="selectedModel.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="64" height="64" />
+              <img v-else-if="selectedModel.icon === 'gemini'" width="64" height="64" :src="geminiIcon">
+              <img v-else width="64" height="64" :src="deepseekIcon">
+            </div>
+            
+            <h2 class="modal-title">{{ selectedModel.name }}</h2>
+            <p class="modal-company">Компания: {{ selectedModel.company }}</p>
+            
+            <div class="modal-description">
+              <p class="description-label">Кто это:</p>
+              <p class="description-text">{{ selectedModel.description }}</p>
+            </div>
+
+            <div class="modal-cost">
+              <span class="cost-value">{{ selectedModel.cost || 0 }}</span>
+              <span class="cost-unit">за ответ</span>
+            </div>
+
+            <button class="select-button" @click="handleSelectModel">
+              Выбрать
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -200,6 +305,7 @@ const handleModelSelect = (model) => {
   padding: 16px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
+  padding-bottom: 40px; /* Space for scrolling past bottom */
 }
 
 /* Top Bar */
@@ -208,20 +314,6 @@ const handleModelSelect = (model) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-}
-
-.app-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 17px;
-  font-weight: 600;
-}
-
-.subtitle {
-  font-size: 12px;
-  color: #8E8E93;
-  font-weight: 400;
 }
 
 .icon-button {
@@ -240,14 +332,22 @@ const handleModelSelect = (model) => {
   margin-bottom: 32px;
 }
 
+.balance-section-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
 .balance-icon {
-  margin-bottom: 12px;
+  width: 3rem;
+  height: 3rem;
 }
 
 .balance-amount {
-  font-size: 40px;
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 4px;
 }
 
 .balance-label {
@@ -362,7 +462,7 @@ const handleModelSelect = (model) => {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: #1c1c1e; /* Transparent/Same as bg */
+  background: #1c1c1e;
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -395,5 +495,145 @@ const handleModelSelect = (model) => {
   padding: 8px;
   cursor: pointer;
   color: #666;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 500px; /* Limit width on tablets */
+  background: #1c1c1e;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 20px;
+  padding-bottom: 40px; /* Safe area for bottom */
+  position: relative;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.modal-handle-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: #3a3a3c;
+  border-radius: 2px;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.modal-icon-large {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.modal-company {
+  color: #8E8E93;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.modal-description {
+  text-align: center;
+  margin-bottom: 24px;
+  max-width: 90%;
+}
+
+.description-label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.description-text {
+  color: #8E8E93;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.modal-cost {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.cost-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cost-unit {
+  color: #8E8E93;
+  font-size: 14px;
+}
+
+.select-button {
+  width: 100%;
+  padding: 16px;
+  background: #4845d2; /* Purple-ish color from screenshot */
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.select-button:active {
+  opacity: 0.8;
+}
+
+/* Modal Transitions */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active .modal-content,
+.modal-leave-active .modal-content {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.modal-enter-from .modal-content,
+.modal-leave-to .modal-content {
+  transform: translateY(100%);
 }
 </style>
