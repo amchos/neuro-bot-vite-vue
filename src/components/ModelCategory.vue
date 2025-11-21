@@ -85,13 +85,13 @@ const onSelectModel = (model) => {
 .models-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .model-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 8px 16px;
   background: #1c1c1e;
   border-radius: 12px;
   cursor: pointer;
