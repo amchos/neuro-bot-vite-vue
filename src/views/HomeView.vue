@@ -2,8 +2,13 @@
 import { computed, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 import balanceIcon from '@/assets/icons/balance-icon.svg'
+import addBalanceIcon from '@/assets/icons/add-balance-icon.svg'
+import chatsIcon from '@/assets/icons/chats-icon.svg'
+import inviteIcon from '@/assets/icons/invite-icon.svg'
+import settingsIcon from '@/assets/icons/settings-icon.svg'
 import ModelCategory from '@/components/ModelCategory.vue'
 import ModelDetailsModal from '@/components/ModelDetailsModal.vue'
+import ProBanner from '@/components/ProBanner.vue'
 
 const appStore = useAppStore()
 
@@ -151,11 +156,7 @@ const handleSelectModel = (model) => {
       <!-- Header / Top Bar -->
       <div class="top-bar">
         <button class="icon-button menu-button">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img :src="settingsIcon" alt="Menu" width="24" height="24" />
         </button>
       </div>
 
@@ -174,50 +175,27 @@ const handleSelectModel = (model) => {
       <div class="actions-grid">
         <button class="action-card" @click="handleTopUp">
           <div class="action-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <img :src="addBalanceIcon" alt="Top Up" width="24" height="24" />
           </div>
           <span>Пополнить</span>
         </button>
 
         <button class="action-card" @click="handleChats">
           <div class="action-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <img :src="chatsIcon" alt="Chats" width="24" height="24" />
           </div>
           <span>Чаты</span>
         </button>
 
         <button class="action-card" @click="handleInvite">
           <div class="action-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M20 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <img :src="inviteIcon" alt="Invite" width="24" height="24" />
           </div>
           <span>Пригласить</span>
         </button>
       </div>
-
       <!-- Pro Subscription Banner -->
-      <div class="pro-banner">
-        <div class="pro-content">
-          <div class="pro-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
-            </svg>
-          </div>
-          <span class="pro-title">Подписка Pro</span>
-        </div>
-        <span class="pro-date">до 18.08.2025</span>
-      </div>
+      <ProBanner />
     </div>
 
     <!-- Models List -->
@@ -295,6 +273,11 @@ const handleSelectModel = (model) => {
   height: 2.5rem;
 }
 
+.pro-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 .balance-amount {
   font-size: 2.5rem;
   font-weight: 700;
@@ -343,34 +326,7 @@ const handleSelectModel = (model) => {
   transform: scale(0.9);
 }
 
-/* Pro Banner */
-.pro-banner {
-  background: linear-gradient(90deg, #2c2c2e 0%, #3a3a3c 100%);
-  border: 1px solid #8E44AD;
-  border-radius: 14px;
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
 
-.pro-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.pro-title {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.pro-date {
-  color: #8E8E93;
-  font-size: 13px;
-}
 
 /* Models List */
 .models-list {
