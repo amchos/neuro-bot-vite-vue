@@ -74,17 +74,6 @@ const handleModelSelect = (model) => {
           <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <div class="app-title">
-        <span>Telegram MiniApp</span>
-        <span class="subtitle">Mini app</span>
-      </div>
-      <button class="icon-button more-button">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="5" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="19" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
     </div>
 
     <!-- Balance Section -->
@@ -201,7 +190,8 @@ const handleModelSelect = (model) => {
 
 <style scoped>
 .home {
-  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100dvw;
   background-color: #1c1c1e;
   color: white;
   padding: 16px;
