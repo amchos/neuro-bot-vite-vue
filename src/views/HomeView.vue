@@ -321,13 +321,15 @@ const handleSelectModel = (model) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 1px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .action-card:active {
   background: #3a3a3c;
+  border: none;
+  border-radius: 14px;
 }
 
 .action-card span {
