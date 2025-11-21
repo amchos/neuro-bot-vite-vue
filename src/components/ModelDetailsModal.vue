@@ -22,7 +22,16 @@ const isDragging = ref(false)
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {
     modalTranslateY.value = 0
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
   }
+})
+
+// Clean up on unmount
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  document.body.style.overflow = ''
 })
 
 const onTouchStart = (e) => {
