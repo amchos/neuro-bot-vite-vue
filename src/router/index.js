@@ -1,12 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAppStore } from '@/stores/app';
 import HomeView from '@/views/HomeView.vue';
+import InviteView from '@/views/InviteView.vue';
 
 const routes = [
     {
         path: '/',
         name: 'home',
         component: HomeView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/invite',
+        name: 'invite',
+        component: InviteView,
         meta: { requiresAuth: true },
     },
     // Добавьте другие маршруты здесь

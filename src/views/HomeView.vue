@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import balanceIcon from '@/assets/icons/balance-icon.svg'
 import addBalanceIcon from '@/assets/icons/add-balance-icon.svg'
@@ -11,6 +12,7 @@ import ModelDetailsModal from '@/components/ModelDetailsModal.vue'
 import ProBanner from '@/components/ProBanner.vue'
 
 const appStore = useAppStore()
+const router = useRouter()
 
 // Computed properties
 const userBalance = computed(() => appStore.userBalance || 0)
@@ -128,7 +130,7 @@ const handleChats = () => {
 }
 
 const handleInvite = () => {
-  console.log('Invite clicked')
+  router.push('/invite')
 }
 
 const handleModelSelect = (model, categoryCost) => {
