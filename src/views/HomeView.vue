@@ -263,7 +263,7 @@ const handleSelectModel = (model) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .icon-button {
@@ -279,7 +279,7 @@ const handleSelectModel = (model) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .balance-section-wrapper {
@@ -287,41 +287,41 @@ const handleSelectModel = (model) => {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .balance-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .balance-amount {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
 }
 
 .balance-label {
   color: #8E8E93;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* Actions Grid */
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .action-card {
   background: #2c2c2e;
   border: none;
   border-radius: 14px;
-  padding: 16px 8px;
+  padding: 12px 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -332,12 +332,13 @@ const handleSelectModel = (model) => {
 
 .action-card span {
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
 }
 
 .action-icon {
   color: #fff;
+  transform: scale(0.9);
 }
 
 /* Pro Banner */
@@ -345,28 +346,28 @@ const handleSelectModel = (model) => {
   background: linear-gradient(90deg, #2c2c2e 0%, #3a3a3c 100%);
   border: 1px solid #8E44AD;
   border-radius: 14px;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   cursor: pointer;
 }
 
 .pro-content {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .pro-title {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .pro-date {
   color: #8E8E93;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* Models List */
