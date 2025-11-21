@@ -4,6 +4,8 @@ import claudeIcon from '@/assets/icons/claude-icon.svg'
 import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
 import grokIcon from '@/assets/icons/grok-icon.svg'
+import moreIcon from '@/assets/icons/more-icon.svg'
+import balanceIcon from '@/assets/icons/balance-icon.svg'
 
 defineProps({
   category: {
@@ -24,11 +26,7 @@ const onSelectModel = (model) => {
     <div class="category-header">
       <span class="category-title">{{ category.title }}</span>
       <span class="category-cost">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="cost-icon">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-          <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <img :src="balanceIcon" alt="Balance" width="14" height="14" />
         {{ category.cost }} за ответ
       </span>
     </div>
@@ -44,11 +42,7 @@ const onSelectModel = (model) => {
         </div>
         <span class="model-name">{{ model.name }}</span>
         <button class="model-more">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="1" fill="#666"/>
-            <circle cx="5" cy="12" r="1" fill="#666"/>
-            <circle cx="19" cy="12" r="1" fill="#666"/>
-          </svg>
+          <img :src="moreIcon" alt="More" width="20" height="20" />
         </button>
       </div>
     </div>
