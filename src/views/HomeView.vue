@@ -190,12 +190,12 @@ const handleModelSelect = (model) => {
 
 <style scoped>
 .home {
-  min-height: 100dvh;
-  width: 100dvw;
+  min-height: 100vh;
   background-color: #1c1c1e;
   color: white;
   padding: 16px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 /* Top Bar */
