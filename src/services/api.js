@@ -105,7 +105,11 @@ class ApiService {
                 throw new Error(`Сервер вернул HTML вместо JSON. Status: ${error.response.status}`);
             }
 
-            throw new Error(errorMessage);
+            // Create a new error with the extracted message
+            const enhancedError = new Error(errorMessage);
+            // Attach the original response so the store can access it for debug info
+            enhancedError.response = error.response;
+            throw enhancedError;
         }
     }
 
