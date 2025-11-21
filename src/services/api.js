@@ -68,12 +68,12 @@ class ApiService {
             });
 
             console.log('📤 Sending to backend:', {
-                init_data: initData
+                initData: initData
             });
 
-            // CRITICAL FIX: Django backend expects snake_case (init_data)
+            // CRITICAL FIX: Backend expects camelCase (initData) as per user report
             const response = await api.post('/users/auth/telegram/', {
-                init_data: initData,
+                initData: initData,
             });
 
             console.log('✅ Authentication successful:', response.data);
