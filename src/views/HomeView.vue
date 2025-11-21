@@ -2,7 +2,11 @@
 import { computed, ref, onMounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 import apiService from '@/services/api'
-
+import balanceIcon from '@/assets/icons/balance-icon.svg'
+import gptIcon from '@/assets/icons/gpt-icon.svg'
+import claudeIcon from '@/assets/icons/claude-icon.svg'
+import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
+import geminiIcon from '@/assets/icons/gemini-icon.svg'
 const appStore = useAppStore()
 
 // Computed properties
@@ -79,13 +83,7 @@ const handleModelSelect = (model) => {
     <!-- Balance Section -->
     <div class="balance-section">
       <div class="balance-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="#8E8E93" stroke-width="2"/>
-          <path d="M12 8V16" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"/>
-          <path d="M8 12H16" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 7L10 17" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"/>
-          <path d="M14 7L12 17" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <img :src="balanceIcon" alt="Balance" width="40" height="40" />
       </div>
       <div class="balance-amount">{{ userBalance }}</div>
       <div class="balance-label">Баланс</div>
@@ -159,19 +157,25 @@ const handleModelSelect = (model) => {
           <div v-for="model in category.items" :key="model.id" class="model-item" @click="handleModelSelect(model)">
             <div class="model-icon-wrapper">
               <!-- Placeholder Icons based on model type -->
-              <svg v-if="model.icon === 'gpt'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- <svg v-if="model.icon === 'gpt'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20Z" fill="white"/>
-              </svg>
-              <svg v-else-if="model.icon === 'gemini'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </svg> -->
+
+              <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="24" height="24" />
+              <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="24" height="24" />
+              <img v-else-if="model.icon === 'gemini'" width="24" height="24" :src="geminiIcon">
+              <img v-else width="24" height="24" :src="deepseekIcon">
+
+              <!-- <svg v-else-if="model.icon === 'gemini'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white"/>
-              </svg>
-              <svg v-else-if="model.icon === 'claude'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </svg> -->
+              <!-- <svg v-else-if="model.icon === 'claude'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
                 <path d="M12 6V18M6 12H18" stroke="white" stroke-width="2"/>
-              </svg>
-              <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </svg> -->
+              <!-- <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L2 12L12 22L22 12L12 2Z" stroke="white" stroke-width="2"/>
-              </svg>
+              </svg> -->
             </div>
             <span class="model-name">{{ model.name }}</span>
             <button class="model-more">
