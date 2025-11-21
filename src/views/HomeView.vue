@@ -1,12 +1,9 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
-import apiService from '@/services/api'
 import balanceIcon from '@/assets/icons/balance-icon.svg'
-import gptIcon from '@/assets/icons/gpt-icon.svg'
-import claudeIcon from '@/assets/icons/claude-icon.svg'
-import deepseekIcon from '@/assets/icons/deepseek-icon.svg'
-import geminiIcon from '@/assets/icons/gemini-icon.svg'
+import ModelCategory from '@/components/ModelCategory.vue'
+import ModelDetailsModal from '@/components/ModelDetailsModal.vue'
 
 const appStore = useAppStore()
 
@@ -129,21 +126,20 @@ const handleInvite = () => {
   console.log('Invite clicked')
 }
 
-const handleModelSelect = (model) => {
-  selectedModel.value = model
+const handleModelSelect = (model, categoryCost) => {
+  selectedModel.value = { ...model, cost: categoryCost }
   isModalOpen.value = true
 }
 
 const closeModal = () => {
   isModalOpen.value = false
-  // Delay clearing selected model to allow animation to finish
   setTimeout(() => {
     selectedModel.value = null
   }, 300)
 }
 
-const handleSelectModel = () => {
-  console.log('Selected model for chat:', selectedModel.value)
+const handleSelectModel = (model) => {
+  console.log('Selected model for chat:', model)
   closeModal()
   // TODO: Navigate to chat
 }
@@ -224,76 +220,21 @@ const handleSelectModel = () => {
 
     <!-- Models List -->
     <div class="models-list">
-      <div v-for="(category, index) in modelCategories" :key="index" class="category-section">
-        <div class="category-header">
-          <span class="category-title">{{ category.title }}</span>
-          <span class="category-cost">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="cost-icon">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            {{ category.cost }} за ответ
-          </span>
-        </div>
-
-        <div class="models-grid">
-          <div v-for="model in category.items" :key="model.id" class="model-item" @click="handleModelSelect(model)">
-            <div class="model-icon-wrapper">
-              <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="24" height="24" />
-              <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="24" height="24" />
-              <img v-else-if="model.icon === 'gemini'" width="24" height="24" :src="geminiIcon">
-              <img v-else width="24" height="24" :src="deepseekIcon">
-            </div>
-            <span class="model-name">{{ model.name }}</span>
-            <button class="model-more">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="1" fill="#666"/>
-                <circle cx="5" cy="12" r="1" fill="#666"/>
-                <circle cx="19" cy="12" r="1" fill="#666"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+      <ModelCategory 
+        v-for="(category, index) in modelCategories" 
+        :key="index" 
+        :category="category"
+        @select-model="(model) => handleModelSelect(model, category.cost)"
+      />
     </div>
 
     <!-- Model Details Modal -->
-    <Transition name="modal">
-      <div v-if="isModalOpen" class="modal-backdrop" @click="closeModal">
-        <div class="modal-content" @click.stop>
-          <div class="modal-handle-bar">
-            <div class="modal-handle"></div>
-          </div>
-          
-          <div v-if="selectedModel" class="modal-body">
-            <div class="modal-icon-large">
-              <img v-if="selectedModel.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="64" height="64" />
-              <img v-else-if="selectedModel.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="64" height="64" />
-              <img v-else-if="selectedModel.icon === 'gemini'" width="64" height="64" :src="geminiIcon">
-              <img v-else width="64" height="64" :src="deepseekIcon">
-            </div>
-            
-            <h2 class="modal-title">{{ selectedModel.name }}</h2>
-            <p class="modal-company">Компания: {{ selectedModel.company }}</p>
-            
-            <div class="modal-description">
-              <p class="description-label">Кто это:</p>
-              <p class="description-text">{{ selectedModel.description }}</p>
-            </div>
-
-            <div class="modal-cost">
-              <span class="cost-value">{{ selectedModel.cost || 0 }}</span>
-              <span class="cost-unit">за ответ</span>
-            </div>
-
-            <button class="select-button" @click="handleSelectModel">
-              Выбрать
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
+    <ModelDetailsModal 
+      :is-open="isModalOpen"
+      :model="selectedModel"
+      @close="closeModal"
+      @select="handleSelectModel"
+    />
   </div>
 </template>
 
@@ -424,216 +365,5 @@ const handleSelectModel = () => {
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 0 4px;
-}
-
-.category-title {
-  font-size: 16px;
-  color: #8E8E93;
-}
-
-.category-cost {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  color: #8E8E93;
-}
-
-.cost-icon {
-  width: 14px;
-  height: 14px;
-}
-
-.models-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.model-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background: #1c1c1e;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.model-item:hover {
-  background: #2c2c2e;
-}
-
-.model-icon-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #2c2c2e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-}
-
-.model-name {
-  flex: 1;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.model-more {
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  color: #666;
-}
-
-/* Modal Styles */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: 1000;
-  backdrop-filter: blur(2px);
-}
-
-.modal-content {
-  width: 100%;
-  max-width: 500px; /* Limit width on tablets */
-  background: #1c1c1e;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  padding: 20px;
-  padding-bottom: 40px; /* Safe area for bottom */
-  position: relative;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.modal-handle-bar {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.modal-handle {
-  width: 40px;
-  height: 4px;
-  background: #3a3a3c;
-  border-radius: 2px;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.modal-icon-large {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 16px;
-}
-
-.modal-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-}
-
-.modal-company {
-  color: #8E8E93;
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-.modal-description {
-  text-align: center;
-  margin-bottom: 24px;
-  max-width: 90%;
-}
-
-.description-label {
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.description-text {
-  color: #8E8E93;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.modal-cost {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 24px;
-}
-
-.cost-value {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.cost-unit {
-  color: #8E8E93;
-  font-size: 14px;
-}
-
-.select-button {
-  width: 100%;
-  padding: 16px;
-  background: #4845d2; /* Purple-ish color from screenshot */
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.select-button:active {
-  opacity: 0.8;
-}
-
-/* Modal Transitions */
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-active .modal-content,
-.modal-leave-active .modal-content {
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.modal-enter-from .modal-content,
-.modal-leave-to .modal-content {
-  transform: translateY(100%);
 }
 </style>
