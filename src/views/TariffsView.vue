@@ -44,6 +44,38 @@ const handleCheckSubscription = () => {
   // Logic to check subscription
   closeFreePlusModal()
 }
+
+// Mouse Drag Logic
+const isDown = ref(false)
+const startX = ref(0)
+const scrollLeft = ref(0)
+
+const onMouseDown = (e) => {
+  isDown.value = true
+  const container = e.currentTarget
+  startX.value = e.pageX - container.offsetLeft
+  scrollLeft.value = container.scrollLeft
+  container.style.cursor = 'grabbing'
+}
+
+const onMouseLeave = (e) => {
+  isDown.value = false
+  e.currentTarget.style.cursor = 'grab'
+}
+
+const onMouseUp = (e) => {
+  isDown.value = false
+  e.currentTarget.style.cursor = 'grab'
+}
+
+const onMouseMove = (e) => {
+  if (!isDown.value) return
+  e.preventDefault()
+  const container = e.currentTarget
+  const x = e.pageX - container.offsetLeft
+  const walk = (x - startX.value) * 2 // Scroll-fast
+  container.scrollLeft = scrollLeft.value - walk
+}
 </script>
 
 <template>
@@ -52,7 +84,14 @@ const handleCheckSubscription = () => {
       <h1 class="page-title">Выберите тариф</h1>
     </div>
 
-    <div class="tariffs-slider" @scroll="onScroll">
+    <div 
+      class="tariffs-slider" 
+      @scroll="onScroll"
+      @mousedown="onMouseDown"
+      @mouseleave="onMouseLeave"
+      @mouseup="onMouseUp"
+      @mousemove="onMouseMove"
+    >
       <!-- Pro Plan -->
       <div class="tariff-card pro-card">
         <div class="card-content">
@@ -168,6 +207,7 @@ const handleCheckSubscription = () => {
   gap: 16px;
   padding: 0 16px;
   align-items: center;
+  cursor: grab;
 }
 
 .tariffs-slider::-webkit-scrollbar {
