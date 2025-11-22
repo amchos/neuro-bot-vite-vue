@@ -104,7 +104,7 @@ const handleItemClick = (item) => {
   background: #2c2c2e;
   border: none;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;

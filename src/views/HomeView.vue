@@ -129,7 +129,7 @@ const handleTopUp = () => {
 }
 
 const handleChats = () => {
-  showAlert('Чаты сейчас в разработке')
+  showAlert('Чаты находятся в разработке')
 }
 
 const handleInvite = () => {

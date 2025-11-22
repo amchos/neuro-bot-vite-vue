@@ -3,6 +3,7 @@ import { useAppStore } from '@/stores/app';
 import HomeView from '@/views/HomeView.vue';
 import InviteView from '@/views/InviteView.vue';
 import MenuView from '@/views/MenuView.vue';
+import TariffsView from '@/views/TariffsView.vue';
 
 const routes = [
     {
@@ -21,6 +22,12 @@ const routes = [
         path: '/menu',
         name: 'menu',
         component: MenuView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/tariffs',
+        name: 'tariffs',
+        component: TariffsView,
         meta: { requiresAuth: true },
     },
     // Добавьте другие маршруты здесь

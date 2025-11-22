@@ -1,9 +1,16 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
+
+const router = useRouter()
+
+const handleBannerClick = () => {
+  router.push('/tariffs')
+}
 </script>
 
 <template>
-  <div class="pro-banner">
+  <div class="pro-banner" @click="handleBannerClick">
     <div class="pro-content">
       <div class="pro-icon">
         <img :src="geminiIcon" alt="Pro" width="100%" height="100%" />
