@@ -144,4 +144,8 @@ const handleItemClick = (item) => {
 .arrow-right {
   opacity: 0.5;
 }
+
+.menu-list .menu-item:nth-child(-n+3) {
+  margin-bottom: 22px;
+}
 </style>
