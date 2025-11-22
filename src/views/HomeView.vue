@@ -11,8 +11,11 @@ import ModelCategory from '@/components/ModelCategory.vue'
 import ModelDetailsModal from '@/components/ModelDetailsModal.vue'
 import ProBanner from '@/components/ProBanner.vue'
 
+import { useTelegram } from '@/composables/useTelegram'
+
 const appStore = useAppStore()
 const router = useRouter()
+const { showAlert } = useTelegram()
 
 // Computed properties
 const userBalance = computed(() => appStore.userBalance || 0)
@@ -126,7 +129,7 @@ const handleTopUp = () => {
 }
 
 const handleChats = () => {
-  console.log('Chats clicked')
+  showAlert('Чаты сейчас в разработке')
 }
 
 const handleInvite = () => {
