@@ -146,6 +146,6 @@ const handleItemClick = (item) => {
 }
 
 .menu-list .menu-item:nth-child(-n+3) {
-  margin-bottom: 22px;
+  margin-bottom: 15px;
 }
 </style>
