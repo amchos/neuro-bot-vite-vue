@@ -57,6 +57,15 @@ watch(
 
     <!-- Основное приложение -->
     <router-view v-else />
+
+    <!-- DEBUG OVERLAY -->
+    <div style="position: fixed; bottom: 0; left: 0; background: rgba(0,0,0,0.8); color: lime; padding: 10px; font-size: 10px; z-index: 9999; max-width: 100%; word-break: break-all;">
+      <p>Route: {{ route.fullPath }}</p>
+      <p>Name: {{ route.name }}</p>
+      <p>Auth: {{ appStore.isAuthenticated }}</p>
+      <p>Loading: {{ appStore.isAuthenticating }}</p>
+      <p>Error: {{ appStore.authError }}</p>
+    </div>
   </div>
 </template>
 
