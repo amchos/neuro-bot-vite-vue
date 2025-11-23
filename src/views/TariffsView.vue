@@ -55,20 +55,23 @@ const onMouseDown = (e) => {
   const container = e.currentTarget
   startX.value = e.pageX - container.offsetLeft
   scrollLeft.value = container.scrollLeft
-  container.style.cursor = 'grabbing'
+  // container.style.cursor = 'grabbing'
   container.style.scrollBehavior = 'auto' // Disable smooth scroll while dragging
+  container.style.scrollSnapType = 'none' // Disable snap while dragging
 }
 
 const onMouseLeave = (e) => {
   isDown.value = false
-  e.currentTarget.style.cursor = 'grab'
+  // e.currentTarget.style.cursor = 'grab'
   e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
+  e.currentTarget.style.scrollSnapType = 'x mandatory' // Re-enable snap
 }
 
 const onMouseUp = (e) => {
   isDown.value = false
-  e.currentTarget.style.cursor = 'grab'
+  // e.currentTarget.style.cursor = 'grab'
   e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
+  e.currentTarget.style.scrollSnapType = 'x mandatory' // Re-enable snap
 }
 
 const onMouseMove = (e) => {
