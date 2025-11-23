@@ -61,17 +61,33 @@ const onMouseDown = (e) => {
 }
 
 const onMouseLeave = (e) => {
+  if (!isDown.value) return
   isDown.value = false
-  // e.currentTarget.style.cursor = 'grab'
-  e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
-  e.currentTarget.style.scrollSnapType = 'x mandatory' // Re-enable snap
+  handleSnap(e.currentTarget)
 }
 
 const onMouseUp = (e) => {
+  if (!isDown.value) return
   isDown.value = false
-  // e.currentTarget.style.cursor = 'grab'
-  e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
-  e.currentTarget.style.scrollSnapType = 'x mandatory' // Re-enable snap
+  handleSnap(e.currentTarget)
+}
+
+const handleSnap = (container) => {
+  const width = container.offsetWidth
+  const scrollLeft = container.scrollLeft
+  const nearestIndex = Math.round(scrollLeft / width)
+  
+  // Smooth scroll to nearest slide
+  container.scrollTo({
+    left: nearestIndex * width,
+    behavior: 'smooth'
+  })
+  
+  // Restore snap after animation
+  setTimeout(() => {
+    container.style.scrollSnapType = 'x mandatory'
+    container.style.scrollBehavior = 'smooth'
+  }, 500)
 }
 
 const onMouseMove = (e) => {
@@ -354,5 +370,61 @@ const onMouseMove = (e) => {
   background: white;
   width: 24px;
   border-radius: 4px;
+}
+
+@media (max-height: 660px) {
+  .header {
+    padding: 12px;
+  }
+  
+  .tariff-card {
+    padding: 20px;
+  }
+
+  .tariff-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 12px;
+  }
+
+  .tariff-title {
+    font-size: 28px;
+  }
+
+  .tariff-subtitle {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .tariff-price {
+    margin-bottom: 16px;
+  }
+
+  .price-value {
+    font-size: 28px;
+  }
+
+  .action-button {
+    padding: 12px;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .buttons-group {
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+
+  .features-list {
+    gap: 10px;
+  }
+
+  .features-list li {
+    font-size: 13px;
+  }
+  
+  .pagination {
+    padding: 12px;
+  }
 }
 </style>
