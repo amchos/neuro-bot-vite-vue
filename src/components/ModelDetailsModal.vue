@@ -122,10 +122,10 @@ const handleSelect = () => {
         
         <div v-if="model" class="modal-body">
           <div class="modal-icon-large">
-            <img v-if="model.icon === 'gpt'" :src="gptIcon" alt="gpt Icon" width="64" height="64" />
-            <img v-else-if="model.icon === 'claude'" :src="claudeIcon" alt="claude Icon" width="64" height="64" />
+            <img v-if="model.icon === 'gpt'" width="64" height="64" :src="gptIcon" alt="gpt Icon" />
+            <img v-else-if="model.icon === 'claude'" width="64" height="64" :src="claudeIcon" alt="claude Icon" />
             <img v-else-if="model.icon === 'gemini'" width="64" height="64" :src="geminiIcon">
-            <img v-else-if="model.icon === 'grok'" :src="grokIcon" alt="grok icon">
+            <img v-else-if="model.icon === 'grok'" width="64" height="64" :src="grokIcon" alt="grok icon">
             <img v-else width="64" height="64" :src="deepseekIcon">
           </div>
           
@@ -205,6 +205,9 @@ const handleSelect = () => {
   width: 80px;
   height: 80px;
   margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-title {
