@@ -10,11 +10,4 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 
-// Global error handler for debugging
-app.config.errorHandler = (err, instance, info) => {
-    console.error('Global Error:', err);
-    console.error('Info:', info);
-    alert(`Error: ${err.message}\nInfo: ${info}`);
-};
-
 app.mount('#app');
