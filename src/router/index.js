@@ -30,6 +30,7 @@ const routes = [
         component: TariffsView,
         meta: { requiresAuth: true },
     },
+    // Добавьте другие маршруты здесь
     // Catch-all route for Telegram params and 404s
     {
         path: '/:pathMatch(.*)*',

@@ -56,16 +56,19 @@ const onMouseDown = (e) => {
   startX.value = e.pageX - container.offsetLeft
   scrollLeft.value = container.scrollLeft
   container.style.cursor = 'grabbing'
+  container.style.scrollBehavior = 'auto' // Disable smooth scroll while dragging
 }
 
 const onMouseLeave = (e) => {
   isDown.value = false
   e.currentTarget.style.cursor = 'grab'
+  e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
 }
 
 const onMouseUp = (e) => {
   isDown.value = false
   e.currentTarget.style.cursor = 'grab'
+  e.currentTarget.style.scrollBehavior = 'smooth' // Re-enable smooth scroll
 }
 
 const onMouseMove = (e) => {
@@ -73,7 +76,7 @@ const onMouseMove = (e) => {
   e.preventDefault()
   const container = e.currentTarget
   const x = e.pageX - container.offsetLeft
-  const walk = (x - startX.value) * 2 // Scroll-fast
+  const walk = (x - startX.value) * 1 // Natural 1:1 scroll
   container.scrollLeft = scrollLeft.value - walk
 }
 </script>
@@ -208,6 +211,8 @@ const onMouseMove = (e) => {
   padding: 0 16px;
   align-items: center;
   cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .tariffs-slider::-webkit-scrollbar {
