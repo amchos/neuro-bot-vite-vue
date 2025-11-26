@@ -125,7 +125,7 @@ const modelCategories = ref([
 
 // Actions
 const handleTopUp = () => {
-  console.log('Top up clicked')
+  router.push('/add-balance')
 }
 
 const handleChats = () => {

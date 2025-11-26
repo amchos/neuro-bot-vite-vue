@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue';
 import InviteView from '@/views/InviteView.vue';
 import MenuView from '@/views/MenuView.vue';
 import TariffsView from '@/views/TariffsView.vue';
+import AddBalanceView from '@/views/AddBalanceView.vue';
 
 const routes = [
     {
@@ -28,6 +29,12 @@ const routes = [
         path: '/tariffs',
         name: 'tariffs',
         component: TariffsView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/add-balance',
+        name: 'add-balance',
+        component: AddBalanceView,
         meta: { requiresAuth: true },
     },
     // Добавьте другие маршруты здесь

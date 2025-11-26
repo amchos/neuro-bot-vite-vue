@@ -1,6 +1,26 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import geminiIcon from '@/assets/icons/gemini-icon.svg'
+import arrowIcon from '@/assets/icons/arrow-icon.svg'
+
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Подписка Pro'
+  },
+  subtitle: {
+    type: String,
+    default: 'до 18.08.2025'
+  },
+  showArrow: {
+    type: Boolean,
+    default: false
+  },
+  iconSrc: {
+    type: String,
+    default: geminiIcon
+  }
+})
 
 const router = useRouter()
 
@@ -13,11 +33,16 @@ const handleBannerClick = () => {
   <div class="pro-banner" @click="handleBannerClick">
     <div class="pro-content">
       <div class="pro-icon">
-        <img :src="geminiIcon" alt="Pro" width="100%" height="100%" />
+        <img :src="iconSrc" alt="Pro" width="100%" height="100%" />
       </div>
-      <span class="pro-title">Подписка Pro</span>
+      <div class="text-content">
+        <span class="pro-title">{{ title }}</span>
+        <span class="pro-subtitle">{{ subtitle }}</span>
+      </div>
     </div>
-    <span class="pro-date">до 18.08.2025</span>
+    <div v-if="showArrow" class="arrow-icon">
+      <img :src="arrowIcon" alt="Arrow" width="100%" height="100%" />
+    </div>
   </div>
 </template>
 
@@ -25,13 +50,14 @@ const handleBannerClick = () => {
 .pro-banner {
   position: relative;
   border-radius: 14px;
-  padding: 12px;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   cursor: pointer;
   z-index: 0;
+  min-height: 48px;
 }
 
 .pro-banner::before {
@@ -62,22 +88,37 @@ const handleBannerClick = () => {
 .pro-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .pro-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .pro-title {
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 16px;
   color: white;
+  line-height: 1.2;
 }
 
-.pro-date {
+.pro-subtitle {
   color: #8E8E93;
   font-size: 13px;
+  line-height: 1.2;
+}
+
+.arrow-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
 }
 </style>
