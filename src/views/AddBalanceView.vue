@@ -243,6 +243,7 @@ const handleBuy = () => {
 .token-desc {
   font-size: 13px;
   color: #8E8E93;
+  width: 60%;
 }
 
 .token-card.selected .token-desc {
