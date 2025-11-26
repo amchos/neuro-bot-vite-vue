@@ -93,7 +93,9 @@ const handleBuy = () => {
           :class="{ 'selected': selectedPackage?.id === pkg.id }"
           @click="selectPackage(pkg)"
         >
-          <img v-if="pkg.icon === 'fire'" :src="fireIcon" alt="Popular" class="fire-badge" />
+          <div class="icon-placeholder">
+            <img v-if="pkg.icon === 'fire'" :src="fireIcon" alt="Popular" class="fire-icon-img" />
+          </div>
           
           <div class="card-content-wrapper">
             <div class="top-row">
@@ -110,6 +112,9 @@ const handleBuy = () => {
               <div class="token-desc">{{ pkg.description }}</div>
               <div class="token-price-per">{{ pkg.pricePerToken }} ₽ за жетон</div>
             </div>
+          </div>
+          <div class="icon-placeholder">
+            <img v-if="pkg.icon === 'fire'" :src="fireIcon" alt="Popular" class="fire-icon-img" />
           </div>
         </div>
       </div>
@@ -178,9 +183,12 @@ const handleBuy = () => {
 }
 
 .token-card {
+  display: flex;
+  align-items: center;
+  height: 90px;
   background: #2c2c2e;
   border-radius: 16px;
-  padding: 16px;
+  padding: 11px 5px;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -191,14 +199,14 @@ const handleBuy = () => {
   border-color: #5e5ce6;
 }
 
-.fire-badge {
-  width: 20px;
-  height: 20px;   
-  position: absolute;
-  top: 50%;
-  transform: translate(-100%, -50%);
-  z-index: 1;
-  left: -8px; /* Adjust based on padding */
+.icon-placeholder { 
+  width: 25px;
+  height: 25px;
+}
+
+.fire-icon-img {
+    width: 100%;
+    height: 100%;
 }
 
 .card-content-wrapper {
@@ -206,6 +214,7 @@ const handleBuy = () => {
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  padding: 0 5px;
 }
 
 .top-row {
@@ -229,7 +238,7 @@ const handleBuy = () => {
 }
 
 .token-amount {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: white;
 }
@@ -241,7 +250,7 @@ const handleBuy = () => {
 }
 
 .token-desc {
-  font-size: 13px;
+  font-size: 0.6rem;
   color: #8E8E93;
   width: 60%;
 }
@@ -251,13 +260,13 @@ const handleBuy = () => {
 }
 
 .token-price {
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 600;
   color: white;
 }
 
 .token-price-per {
-  font-size: 13px;
+  font-size: 0.6rem;
   color: #8E8E93;
   text-align: right;
 }
@@ -284,7 +293,7 @@ const handleBuy = () => {
   color: white;
   border: none;
   border-radius: 14px;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(88, 86, 214, 0.4);
