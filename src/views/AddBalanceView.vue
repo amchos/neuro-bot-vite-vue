@@ -114,7 +114,6 @@ const handleBuy = () => {
             </div>
           </div>
           <div class="icon-placeholder">
-            <img v-if="pkg.icon === 'fire'" :src="fireIcon" alt="Popular" class="fire-icon-img" />
           </div>
         </div>
       </div>
