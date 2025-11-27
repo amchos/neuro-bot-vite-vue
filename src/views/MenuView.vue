@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ProBanner from '@/components/ProBanner.vue'
 import neuroSettingsIcon from '@/assets/icons/neuro-settings-icon.svg'
@@ -29,6 +29,13 @@ const menuItems = [
   { id: 'support', title: 'Поддержка', icon: supportIcon, url: 'https://t.me/support' }
 ]
 
+const visibleMenuItems = computed(() => {
+  return menuItems.filter(item => {
+    if (item.show === undefined) return true
+    return item.show.value
+  })
+})
+
 const footerItems = [
   { id: 'terms', title: 'Пользовательское соглашение', url: '/terms' },
   { id: 'privacy', title: 'Политика конфиденциальности', url: '/privacy' }
@@ -52,8 +59,7 @@ const handleItemClick = (item) => {
 
       <div class="menu-list">
         <button 
-          v-for="item in menuItems" 
-          v-if="item.show === undefined || item.show"
+          v-for="item in visibleMenuItems" 
           :key="item.id" 
           class="menu-item"
           @click="handleItemClick(item)"
