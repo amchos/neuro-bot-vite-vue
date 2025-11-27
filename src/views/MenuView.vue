@@ -10,32 +10,17 @@ import supportIcon from '@/assets/icons/support-icon.svg'
 import settingsArrowIcon from '@/assets/icons/settings-arrow-icon.svg'
 
 import telegramService from '@/services/telegram'
-import { ref, onMounted } from 'vue'
 
 const router = useRouter()
-const showAddToHome = ref(false)
 
-const menuItems = ref([
+const menuItems = [
   { id: 'settings', title: 'Настройки нейросети', icon: neuroSettingsIcon, route: '/settings' },
   { id: 'history', title: 'История операций', icon: historyIcon, route: '/history' },
-  // 'add-home' will be added dynamically if supported
+  { id: 'add-home', title: 'Добавить на экран "Домой"', icon: addHomeIcon, action: 'addToHome' },
   { id: 'channel', title: 'Канал бота', icon: botChannelIcon, url: 'https://t.me/bot_channel' },
   { id: 'news', title: 'Новостной канал про нейросети', icon: newsChannelIcon, url: 'https://t.me/news_channel' },
   { id: 'support', title: 'Поддержка', icon: supportIcon, url: 'https://t.me/support' }
-])
-
-onMounted(() => {
-  if (telegramService.isAvailable) {
-    telegramService.checkHomeScreenStatus((status) => {
-      console.log('Home Screen Status:', status)
-      if (status === 'missed' || status === 'unknown') {
-        // Insert 'add-home' item at the correct position (index 2)
-        const addHomeItem = { id: 'add-home', title: 'Добавить на экран "Домой"', icon: addHomeIcon, action: 'addToHome' }
-        menuItems.value.splice(2, 0, addHomeItem)
-      }
-    })
-  }
-})
+]
 
 const footerItems = [
   { id: 'terms', title: 'Пользовательское соглашение', url: '/terms' },
