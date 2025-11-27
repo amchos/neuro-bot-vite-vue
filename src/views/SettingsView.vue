@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRouter, onBeforeRouteLeave } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import apiService from '@/services/api';
 import telegramService from '@/services/telegram';
 
@@ -20,13 +20,10 @@ const styles = [
   { id: 'formal', label: 'Официальный', description: 'чёткие и хорошо структурированные ответы' }
 ];
 
-const originalSettings = ref(null);
-const showUnsavedModal = ref(false);
-const pendingNavigation = ref(null);
-
 const fetchSettings = async () => {
   isLoading.value = true;
   error.value = null;
+  
   try {
     if (import.meta.env.DEV) {
       // Mock data
@@ -35,6 +32,8 @@ const fetchSettings = async () => {
       selectedStyle.value = 'ordinary';
     } else {
       const data = await apiService.getSettings();
+      
+      // If name is empty, try to get from Telegram
       if (!data.name && telegramService.isAvailable) {
         const tgUser = telegramService.getUser();
         if (tgUser) {
@@ -47,14 +46,10 @@ const fetchSettings = async () => {
       } else {
         name.value = data.name || '';
       }
+      
       instructions.value = data.instructions || '';
       selectedStyle.value = data.style || 'ordinary';
     }
-    originalSettings.value = {
-      name: name.value,
-      instructions: instructions.value,
-      style: selectedStyle.value
-    };
   } catch (err) {
     console.error('Failed to fetch settings:', err);
     error.value = 'Не удалось загрузить настройки';
@@ -66,19 +61,23 @@ const fetchSettings = async () => {
 const saveSettings = async () => {
   isSaving.value = true;
   error.value = null;
+  
   try {
     const settings = {
       name: name.value,
       instructions: instructions.value,
       style: selectedStyle.value
     };
+
     if (import.meta.env.DEV) {
       console.log('Saving settings (mock):', settings);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
     } else {
       await apiService.updateSettings(settings);
     }
-    // Optionally show success or navigate back
+    
+    // Optional: Show success message or navigate back
+    // router.push('/menu'); 
   } catch (err) {
     console.error('Failed to save settings:', err);
     error.value = 'Не удалось сохранить настройки';
@@ -90,35 +89,6 @@ const saveSettings = async () => {
 onMounted(() => {
   fetchSettings();
 });
-
-const hasChanges = computed(() => {
-  if (!originalSettings.value) return false;
-  return (
-    name.value !== originalSettings.value.name ||
-    instructions.value !== originalSettings.value.instructions ||
-    selectedStyle.value !== originalSettings.value.style
-  );
-});
-
-onBeforeRouteLeave((to, from, next) => {
-  if (hasChanges.value && !isSaving.value) {
-    showUnsavedModal.value = true;
-    pendingNavigation.value = next;
-  } else {
-    next();
-  }
-});
-
-const confirmExit = () => {
-  showUnsavedModal.value = false;
-  if (pendingNavigation.value) pendingNavigation.value();
-};
-
-const confirmSaveAndExit = async () => {
-  showUnsavedModal.value = false;
-  await saveSettings();
-  if (pendingNavigation.value) pendingNavigation.value();
-};
 </script>
 
 <template>
@@ -126,40 +96,48 @@ const confirmSaveAndExit = async () => {
     <div class="content">
       <div class="form-group">
         <label class="label">Как нейросети к вам обращаться?</label>
-        <input v-model="name" type="text" class="input-field" placeholder="Имя" />
+        <input 
+          v-model="name" 
+          type="text" 
+          class="input-field" 
+          placeholder="Имя"
+        />
       </div>
 
       <div class="form-group">
         <label class="label">Инструкции для нейросети</label>
-        <textarea v-model="instructions" class="textarea-field" placeholder="Здесь можно прописать базовые правила поведения нейросети и настроить её под себя. Например, указать какую роль играть, как структурировать ответы и какие подходы использовать. Эти настройки работают в фоновом режиме и влияют на все ответы системы."></textarea>
+        <textarea 
+          v-model="instructions" 
+          class="textarea-field" 
+          placeholder="Здесь можно прописать базовые правила поведения нейросети и настроить её под себя. Например, указать какую роль играть, как структурировать ответы и какие подходы использовать. Эти настройки работают в фоновом режиме и влияют на все ответы системы."
+        ></textarea>
       </div>
 
       <div class="form-group">
         <label class="label">Выберите стиль ответов:</label>
         <div class="styles-list">
-          <button v-for="style in styles" :key="style.id" class="style-option" :class="{ active: selectedStyle === style.id }" @click="selectedStyle = style.id">
+          <button 
+            v-for="style in styles" 
+            :key="style.id"
+            class="style-option"
+            :class="{ active: selectedStyle === style.id }"
+            @click="selectedStyle = style.id"
+          >
             <span class="style-label">{{ style.label }}</span>
             <span class="style-desc">{{ style.description }}</span>
           </button>
         </div>
       </div>
 
-      <button class="save-button" :disabled="isSaving" @click="saveSettings">
+      <button 
+        class="save-button" 
+        :disabled="isSaving"
+        @click="saveSettings"
+      >
         {{ isSaving ? 'Сохранение...' : 'Сохранить изменения' }}
       </button>
 
       <div v-if="error" class="error-message">{{ error }}</div>
-    </div>
-
-    <div v-if="showUnsavedModal" class="modal-overlay">
-      <div class="modal-content">
-        <h3>Настройки не сохранены</h3>
-        <p>Вы хотите сохранить изменения перед выходом?</p>
-        <div class="modal-buttons">
-          <button class="modal-btn save" @click="confirmSaveAndExit">Сохранить</button>
-          <button class="modal-btn exit" @click="confirmExit">Выйти</button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -246,7 +224,7 @@ const confirmSaveAndExit = async () => {
 }
 
 .style-option.active {
-  background-color: #363457;
+  background-color: #363457; /* Matches the screenshot's dark blueish tint */
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -285,66 +263,5 @@ const confirmSaveAndExit = async () => {
   color: #FF453A;
   text-align: center;
   font-size: 14px;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: #2c2c2e;
-  padding: 24px;
-  border-radius: 16px;
-  width: 80%;
-  max-width: 320px;
-  text-align: center;
-}
-
-.modal-content h3 {
-  margin: 0 0 12px 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.modal-content p {
-  margin: 0 0 24px 0;
-  color: #8E8E93;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-.modal-btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.modal-btn.save {
-  background-color: #363457;
-  color: white;
-}
-
-.modal-btn.exit {
-  background-color: rgba(255, 69, 58, 0.1);
-  color: #FF453A;
 }
 </style>
