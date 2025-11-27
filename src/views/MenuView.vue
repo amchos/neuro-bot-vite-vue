@@ -18,7 +18,7 @@ const menuItems = [
   { id: 'history', title: 'История операций', icon: historyIcon, route: '/history' },
   { id: 'add-home', title: 'Добавить на экран "Домой"', icon: addHomeIcon, action: 'addToHome' },
   { id: 'channel', title: 'Канал бота', icon: botChannelIcon, url: 'https://t.me/bot_channel' },
-  { id: 'news', title: 'Новостной канал про нейросети', icon: newsChannelIcon, url: 'https://t.me/news_channel' },
+  { id: 'news', title: 'Новостной канал про нейросети', icon: newsChannelIcon, url: 'https://t.me/canrobots' },
   { id: 'support', title: 'Поддержка', icon: supportIcon, url: 'https://t.me/support' }
 ]
 
