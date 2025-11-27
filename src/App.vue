@@ -19,12 +19,19 @@ watch(
   (newRouteName) => {
     if (newRouteName && newRouteName !== 'home') {
       telegramService.showBackButton(() => {
-        router.back()
+        // Проверяем, есть ли история для возврата
+        if (window.history.length > 1) {
+          router.back()
+        } else {
+          // Если истории нет, переходим на главную
+          router.push({ name: 'home' })
+        }
       })
     } else {
       telegramService.hideBackButton()
     }
-  }
+  },
+  { immediate: true } // Вызываем сразу при монтировании
 )
 </script>
 

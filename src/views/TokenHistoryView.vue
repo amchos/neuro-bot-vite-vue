@@ -212,6 +212,7 @@ onMounted(() => {
   font-weight: 400;
   display: -webkit-box;
   -webkit-line-clamp: 1; /* Количество строк */
+  line-clamp: 1; /* Standard property for compatibility */
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1; /* Take available space */

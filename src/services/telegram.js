@@ -180,9 +180,15 @@ class TelegramService {
   showBackButton(onClick) {
     if (!this.isAvailable) return;
 
+    // Удаляем предыдущий обработчик если он был
+    if (this._backButtonHandler) {
+      this.tg.BackButton.offClick(this._backButtonHandler);
+    }
+
     this.tg.BackButton.show();
     
     if (onClick) {
+      this._backButtonHandler = onClick;
       this.tg.BackButton.onClick(onClick);
     }
   }
@@ -191,7 +197,27 @@ class TelegramService {
    * Скрыть кнопку назад
    */
   hideBackButton() {
-    this.tg?.BackButton.hide();
+    if (!this.isAvailable) return;
+    
+    // Удаляем обработчик перед скрытием
+    if (this._backButtonHandler) {
+      this.tg.BackButton.offClick(this._backButtonHandler);
+      this._backButtonHandler = null;
+    }
+    
+    this.tg.BackButton.hide();
+  }
+
+  /**
+   * Удалить обработчик кнопки назад
+   */
+  offBackButtonClick() {
+    if (!this.isAvailable) return;
+    
+    if (this._backButtonHandler) {
+      this.tg.BackButton.offClick(this._backButtonHandler);
+      this._backButtonHandler = null;
+    }
   }
 
   // ===== ДИАЛОГИ =====
