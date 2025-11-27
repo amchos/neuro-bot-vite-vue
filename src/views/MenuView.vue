@@ -28,13 +28,22 @@ const footerItems = [
 ]
 
 const handleItemClick = async (item) => {
+  console.log('[MenuView] Item clicked:', item.id)
+  
   if (item.route) {
     router.push(item.route)
     console.log('Navigate to', item.route)
   } else if (item.url) {
+    console.log('[MenuView] Opening URL:', item.url)
     window.open(item.url, '_blank')
   } else if (item.action === 'addToHome') {
-    await telegramService.addToHomeScreenWithFallback()
+    console.log('[MenuView] Calling addToHomeScreenWithFallback')
+    try {
+      await telegramService.addToHomeScreenWithFallback()
+      console.log('[MenuView] addToHomeScreenWithFallback completed')
+    } catch (error) {
+      console.error('[MenuView] Error:', error)
+    }
   }
 }
 </script>
