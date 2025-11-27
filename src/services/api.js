@@ -180,6 +180,24 @@ class ApiService {
     }
 
     /**
+     * Получить настройки пользователя
+     */
+    async getSettings() {
+        // TODO: Verify endpoint with backend team
+        const response = await api.get('/users/settings/');
+        return response.data;
+    }
+
+    /**
+     * Обновить настройки пользователя
+     */
+    async updateSettings(settings) {
+        // TODO: Verify endpoint with backend team
+        const response = await api.post('/users/settings/', settings);
+        return response.data;
+    }
+
+    /**
      * Получить список моделей
      */
     async getModels() {

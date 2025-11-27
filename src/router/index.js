@@ -6,6 +6,7 @@ import MenuView from '@/views/MenuView.vue';
 import TariffsView from '@/views/TariffsView.vue';
 import AddBalanceView from '@/views/AddBalanceView.vue';
 import TokenHistoryView from '@/views/TokenHistoryView.vue';
+import SettingsView from '@/views/SettingsView.vue';
 
 const routes = [
     {
@@ -24,6 +25,12 @@ const routes = [
         path: '/menu',
         name: 'menu',
         component: MenuView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/settings',
+        name: 'settings',
+        component: SettingsView,
         meta: { requiresAuth: true },
     },
     {
