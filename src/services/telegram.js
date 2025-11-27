@@ -8,6 +8,26 @@ class TelegramService {
   constructor() {
     this.tg = tg;
     this.isAvailable = !!tg;
+    this.debugLogs = []; // Временное хранилище логов для отладки
+  }
+
+  // Временный метод для логирования с сохранением
+  debugLog(message, data = null) {
+    const logEntry = data ? `${message} ${JSON.stringify(data)}` : message;
+    console.log(logEntry);
+    this.debugLogs.push(logEntry);
+  }
+
+  // Показать все собранные логи в popup
+  async showDebugLogs() {
+    const logs = this.debugLogs.join('\n');
+    await this.showPopup({
+      title: 'Debug Logs',
+      message: logs || 'No logs collected',
+      buttons: [{ type: 'ok', text: 'OK' }]
+    });
+    // Очищаем логи после показа
+    this.debugLogs = [];
   }
 
   // ===== ИНИЦИАЛИЗАЦИЯ =====
@@ -379,10 +399,10 @@ class TelegramService {
    * Добавить на главный экран
    */
   addToHomeScreen() {
-    console.log('[AddToHome] Calling tg.addToHomeScreen()');
-    console.log('[AddToHome] Method exists:', typeof this.tg?.addToHomeScreen);
+    this.debugLog('[AddToHome] Calling tg.addToHomeScreen()');
+    this.debugLog('[AddToHome] Method type:', typeof this.tg?.addToHomeScreen);
     this.tg?.addToHomeScreen();
-    console.log('[AddToHome] Method called');
+    this.debugLog('[AddToHome] Method called');
   }
 
   /**
@@ -397,56 +417,65 @@ class TelegramService {
    * Если не поддерживается - показать инструкцию
    */
   async addToHomeScreenWithFallback() {
-    console.log('[AddToHome] Starting addToHomeScreenWithFallback');
-    console.log('[AddToHome] isAvailable:', this.isAvailable);
-    console.log('[AddToHome] Platform:', this.getPlatform());
+    this.debugLogs = []; // Очищаем предыдущие логи
+    this.debugLog('[AddToHome] Starting');
+    this.debugLog('[AddToHome] isAvailable:', this.isAvailable);
+    this.debugLog('[AddToHome] Platform:', this.getPlatform());
     
     if (!this.isAvailable) {
-      console.log('[AddToHome] Telegram not available, showing instructions');
+      this.debugLog('[AddToHome] Telegram not available');
+      await this.showDebugLogs();
       await this.showAddToHomeInstructions();
       return;
     }
 
     // Проверяем, доступен ли метод checkHomeScreenStatus
-    if (typeof this.tg.checkHomeScreenStatus !== 'function') {
-      console.log('[AddToHome] checkHomeScreenStatus not available');
-      // Если метод недоступен, пробуем просто добавить
-      // (для старых версий Telegram)
-      if (typeof this.tg.addToHomeScreen === 'function') {
-        console.log('[AddToHome] Calling addToHomeScreen directly');
+    const hasCheckStatus = typeof this.tg.checkHomeScreenStatus === 'function';
+    const hasAddToHome = typeof this.tg.addToHomeScreen === 'function';
+    
+    this.debugLog('[AddToHome] checkHomeScreenStatus exists:', hasCheckStatus);
+    this.debugLog('[AddToHome] addToHomeScreen exists:', hasAddToHome);
+    
+    if (!hasCheckStatus) {
+      this.debugLog('[AddToHome] checkHomeScreenStatus not available');
+      
+      if (hasAddToHome) {
+        this.debugLog('[AddToHome] Calling addToHomeScreen directly');
         this.addToHomeScreen();
+        await this.showDebugLogs();
       } else {
-        console.log('[AddToHome] addToHomeScreen not available, showing instructions');
+        this.debugLog('[AddToHome] addToHomeScreen not available');
+        await this.showDebugLogs();
         await this.showAddToHomeInstructions();
       }
       return;
     }
 
     // Проверяем статус поддержки
-    console.log('[AddToHome] Checking home screen status...');
+    this.debugLog('[AddToHome] Checking status...');
+    
     return new Promise((resolve) => {
       this.checkHomeScreenStatus((status) => {
-        console.log('[AddToHome] Status received:', status);
-        
-        // Возможные статусы:
-        // - 'unsupported' - не поддерживается
-        // - 'unknown' - неизвестно (можно попробовать добавить)
-        // - 'added' - уже добавлено
-        // - 'missed' - можно добавить
+        this.debugLog('[AddToHome] Status:', status);
         
         if (status === 'unsupported') {
-          console.log('[AddToHome] Unsupported, showing instructions');
-          this.showAddToHomeInstructions();
-          resolve(false);
+          this.debugLog('[AddToHome] Unsupported');
+          this.showDebugLogs().then(() => {
+            this.showAddToHomeInstructions();
+            resolve(false);
+          });
         } else if (status === 'added') {
-          console.log('[AddToHome] Already added');
-          this.showAlert('Бот уже добавлен на главный экран! 🎉');
-          resolve(true);
+          this.debugLog('[AddToHome] Already added');
+          this.showDebugLogs().then(() => {
+            this.showAlert('Бот уже добавлен на главный экран! 🎉');
+            resolve(true);
+          });
         } else {
-          // Для статусов 'unknown' и 'missed' пробуем добавить
-          console.log('[AddToHome] Attempting to add to home screen');
+          this.debugLog('[AddToHome] Calling addToHomeScreen');
           this.addToHomeScreen();
-          resolve(true);
+          this.showDebugLogs().then(() => {
+            resolve(true);
+          });
         }
       });
     });
