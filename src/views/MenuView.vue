@@ -27,7 +27,7 @@ const footerItems = [
 
 const handleItemClick = (item) => {
   if (item.route) {
-    // router.push(item.route) // Routes not implemented yet
+    router.push(item.route)
     console.log('Navigate to', item.route)
   } else if (item.url) {
     window.open(item.url, '_blank')

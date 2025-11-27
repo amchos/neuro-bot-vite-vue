@@ -154,10 +154,28 @@ class ApiService {
     }
 
     /**
-     * Получить историю токенов
+     * Получить историю токенов (deprecated)
      */
     async getTokenHistory() {
         const response = await api.get('/users/token-history/');
+        return response.data;
+    }
+
+    /**
+     * Получить список пополнений
+     */
+    async getReplenishments() {
+        // TODO: Verify endpoint with backend team
+        const response = await api.get('/users/transactions/replenishments/');
+        return response.data;
+    }
+
+    /**
+     * Получить список списаний
+     */
+    async getWriteOffs() {
+        // TODO: Verify endpoint with backend team
+        const response = await api.get('/users/transactions/write-offs/');
         return response.data;
     }
 

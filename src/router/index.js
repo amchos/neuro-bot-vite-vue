@@ -5,6 +5,7 @@ import InviteView from '@/views/InviteView.vue';
 import MenuView from '@/views/MenuView.vue';
 import TariffsView from '@/views/TariffsView.vue';
 import AddBalanceView from '@/views/AddBalanceView.vue';
+import TokenHistoryView from '@/views/TokenHistoryView.vue';
 
 const routes = [
     {
@@ -35,6 +36,12 @@ const routes = [
         path: '/add-balance',
         name: 'add-balance',
         component: AddBalanceView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/history',
+        name: 'history',
+        component: TokenHistoryView,
         meta: { requiresAuth: true },
     },
     // Добавьте другие маршруты здесь
