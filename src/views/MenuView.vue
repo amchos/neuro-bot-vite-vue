@@ -27,14 +27,14 @@ const footerItems = [
   { id: 'privacy', title: 'Политика конфиденциальности', url: '/privacy' }
 ]
 
-const handleItemClick = (item) => {
+const handleItemClick = async (item) => {
   if (item.route) {
     router.push(item.route)
     console.log('Navigate to', item.route)
   } else if (item.url) {
     window.open(item.url, '_blank')
   } else if (item.action === 'addToHome') {
-    telegramService.addToHomeScreen()
+    await telegramService.addToHomeScreenWithFallback()
   }
 }
 </script>
