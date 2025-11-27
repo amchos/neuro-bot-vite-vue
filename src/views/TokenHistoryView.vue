@@ -185,7 +185,7 @@ onMounted(() => {
 .transaction-item {
   background-color: #2c2c2e;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
