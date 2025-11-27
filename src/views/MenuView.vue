@@ -34,10 +34,14 @@ const handleItemClick = async (item) => {
     window.open(item.url, '_blank')
   } else if (item.action === 'addToHome') {
     try {
+      // Показываем alert и ждём его закрытия
+      await telegramService.showAlert('Кнопка нажата! Начинаем проверку...')
+      
+      // Теперь вызываем основную функцию
       await telegramService.addToHomeScreenWithFallback()
     } catch (error) {
       console.error('[MenuView] Error:', error)
-      telegramService.showAlert('Произошла ошибка: ' + error.message)
+      await telegramService.showAlert('Произошла ошибка: ' + error.message)
     }
   }
 }

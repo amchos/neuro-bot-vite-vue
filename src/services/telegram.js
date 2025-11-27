@@ -20,12 +20,17 @@ class TelegramService {
 
   // Показать все собранные логи в popup
   async showDebugLogs() {
-    const logs = this.debugLogs.join('\n');
-    await this.showPopup({
-      title: 'Debug Logs',
-      message: logs || 'No logs collected',
-      buttons: [{ type: 'ok', text: 'OK' }]
-    });
+    const logs = this.debugLogs.join('\n\n');
+    const message = logs || 'No logs collected';
+    console.log('=== DEBUG LOGS ===');
+    console.log(message);
+    console.log('=== END DEBUG LOGS ===');
+    
+    // Используем showAlert вместо showPopup для надёжности
+    if (this.isAvailable) {
+      await this.showAlert(message);
+    }
+    
     // Очищаем логи после показа
     this.debugLogs = [];
   }
