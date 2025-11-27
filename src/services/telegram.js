@@ -446,68 +446,29 @@ class TelegramService {
       
       await this.showAlert(`Шаг 2:\ncheckStatus: ${hasCheckStatus}\naddToHome: ${hasAddToHome}`);
       
-      if (!hasCheckStatus) {
-        this.debugLog('[AddToHome] checkHomeScreenStatus not available');
+      // Если метод addToHomeScreen доступен - просто вызываем его
+      // checkHomeScreenStatus не работает надёжно на всех устройствах
+      if (hasAddToHome) {
+        this.debugLog('[AddToHome] Calling addToHomeScreen directly');
+        await this.showAlert('Шаг 3: Вызываем addToHomeScreen...');
+        this.addToHomeScreen();
+        await this.showAlert('✅ Функция вызвана!\n\nЕсли ничего не произошло, используйте ручную инструкцию.');
         
-        if (hasAddToHome) {
-          this.debugLog('[AddToHome] Calling addToHomeScreen directly');
-          await this.showAlert('Шаг 3: Вызываем addToHomeScreen...');
-          this.addToHomeScreen();
-          await this.showAlert('Функция вызвана! Проверьте результат.');
-        } else {
-          this.debugLog('[AddToHome] addToHomeScreen not available');
-          await this.showAlert('Методы недоступны');
-          await this.showAddToHomeInstructions();
-        }
+        // Показываем инструкцию на всякий случай
+        setTimeout(async () => {
+          const result = await this.showConfirm('Бот добавлен на главный экран?\n\nЕсли нет - покажем инструкцию.');
+          if (!result) {
+            await this.showAddToHomeInstructions();
+          }
+        }, 1000);
+        
         return;
       }
-
-      // Проверяем статус поддержки
-      this.debugLog('[AddToHome] Checking status...');
-      await this.showAlert('Шаг 3: Проверяем статус...');
       
-      return new Promise((resolve) => {
-        let timeoutId;
-        let callbackCalled = false;
-        
-        // Устанавливаем таймаут на 2 секунды
-        timeoutId = setTimeout(async () => {
-          if (!callbackCalled) {
-            callbackCalled = true;
-            await this.showAlert('Шаг 3.5: Таймаут! Вызываем напрямую...');
-            this.debugLog('[AddToHome] Timeout - calling directly');
-            this.addToHomeScreen();
-            await this.showAlert('Функция вызвана! Проверьте результат.');
-            resolve(true);
-          }
-        }, 2000);
-        
-        this.checkHomeScreenStatus(async (status) => {
-          if (callbackCalled) return; // Игнорируем если уже обработали через таймаут
-          
-          callbackCalled = true;
-          clearTimeout(timeoutId);
-          
-          this.debugLog('[AddToHome] Status:', status);
-          await this.showAlert(`Шаг 4: Статус = ${status}`);
-          
-          if (status === 'unsupported') {
-            this.debugLog('[AddToHome] Unsupported');
-            await this.showAddToHomeInstructions();
-            resolve(false);
-          } else if (status === 'added') {
-            this.debugLog('[AddToHome] Already added');
-            await this.showAlert('Бот уже добавлен на главный экран! 🎉');
-            resolve(true);
-          } else {
-            this.debugLog('[AddToHome] Calling addToHomeScreen');
-            await this.showAlert('Шаг 5: Вызываем addToHomeScreen...');
-            this.addToHomeScreen();
-            await this.showAlert('Функция вызвана! Проверьте результат.');
-            resolve(true);
-          }
-        });
-      });
+      // Если метод недоступен - показываем инструкцию
+      this.debugLog('[AddToHome] addToHomeScreen not available');
+      await this.showAlert('Методы недоступны');
+      await this.showAddToHomeInstructions();
     } catch (error) {
       await this.showAlert('ОШИБКА: ' + error.message);
       console.error('[AddToHome] Error:', error);
