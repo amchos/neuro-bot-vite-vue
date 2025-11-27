@@ -373,6 +373,29 @@ class TelegramService {
   off(eventName, callback) {
     this.tg?.offEvent(eventName, callback);
   }
+
+  // ===== ДОБАВЛЕНИЕ НА ГЛАВНЫЙ ЭКРАН =====
+  
+  /**
+   * Добавить на главный экран (если поддерживается)
+   */
+  addToHomeScreen() {
+    if (this.isAvailable && typeof this.tg.addToHomeScreen === 'function') {
+      this.tg.addToHomeScreen();
+    }
+  }
+
+  /**
+   * Проверить, поддерживается ли добавление на главный экран
+   */
+  isAddToHomeSupported() {
+    // Проверяем что это мобильное устройство и метод доступен
+    const platform = this.getPlatform();
+    const isMobile = platform === 'android' || platform === 'ios';
+    const hasMethod = typeof this.tg?.addToHomeScreen === 'function';
+    
+    return this.isAvailable && isMobile && hasMethod;
+  }
 }
 
 // Создаём и экспортируем экземпляр
