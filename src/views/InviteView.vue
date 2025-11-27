@@ -92,7 +92,6 @@ const handleInvite = () => {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
 }
 

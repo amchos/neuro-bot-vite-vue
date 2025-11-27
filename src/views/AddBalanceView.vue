@@ -141,7 +141,6 @@ const handleBuy = () => {
   color: white;
   display: flex;
   flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
   padding-bottom: 80px; /* Space for button */
 }

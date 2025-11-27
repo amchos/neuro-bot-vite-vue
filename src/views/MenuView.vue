@@ -84,7 +84,6 @@ const handleItemClick = (item) => {
   background-color: #1c1c1e;
   color: white;
   padding: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
 }
 

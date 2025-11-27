@@ -63,7 +63,6 @@ watch(
 <style scoped>
 .app {
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
 }
 
 .loading-screen,
