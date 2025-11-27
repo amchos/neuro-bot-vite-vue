@@ -8,31 +8,6 @@ class TelegramService {
   constructor() {
     this.tg = tg;
     this.isAvailable = !!tg;
-    this.debugLogs = []; // Временное хранилище логов для отладки
-  }
-
-  // Временный метод для логирования с сохранением
-  debugLog(message, data = null) {
-    const logEntry = data ? `${message} ${JSON.stringify(data)}` : message;
-    console.log(logEntry);
-    this.debugLogs.push(logEntry);
-  }
-
-  // Показать все собранные логи в popup
-  async showDebugLogs() {
-    const logs = this.debugLogs.join('\n\n');
-    const message = logs || 'No logs collected';
-    console.log('=== DEBUG LOGS ===');
-    console.log(message);
-    console.log('=== END DEBUG LOGS ===');
-    
-    // Используем showAlert вместо showPopup для надёжности
-    if (this.isAvailable) {
-      await this.showAlert(message);
-    }
-    
-    // Очищаем логи после показа
-    this.debugLogs = [];
   }
 
   // ===== ИНИЦИАЛИЗАЦИЯ =====
@@ -398,104 +373,6 @@ class TelegramService {
   off(eventName, callback) {
     this.tg?.offEvent(eventName, callback);
   }
-  // ===== ДОБАВЛЕНИЕ НА ГЛАВНЫЙ ЭКРАН =====
-
-  /**
-   * Добавить на главный экран
-   */
-  addToHomeScreen() {
-    this.debugLog('[AddToHome] Calling tg.addToHomeScreen()');
-    this.debugLog('[AddToHome] Method type:', typeof this.tg?.addToHomeScreen);
-    this.tg?.addToHomeScreen();
-    this.debugLog('[AddToHome] Method called');
-  }
-
-  /**
-   * Проверить статус добавления на главный экран
-   */
-  checkHomeScreenStatus(callback) {
-    this.tg?.checkHomeScreenStatus(callback);
-  }
-
-  /**
-   * Попытаться добавить на главный экран с проверкой поддержки
-   * Если не поддерживается - показать инструкцию
-   */
-  async addToHomeScreenWithFallback() {
-    try {
-      this.debugLogs = []; // Очищаем предыдущие логи
-      this.debugLog('[AddToHome] Starting');
-      this.debugLog('[AddToHome] isAvailable:', this.isAvailable);
-      this.debugLog('[AddToHome] Platform:', this.getPlatform());
-      
-      await this.showAlert('Шаг 1: Проверка Telegram API...');
-      
-      if (!this.isAvailable) {
-        this.debugLog('[AddToHome] Telegram not available');
-        await this.showAlert('Telegram API недоступен');
-        await this.showAddToHomeInstructions();
-        return;
-      }
-
-      // Проверяем, доступен ли метод checkHomeScreenStatus
-      const hasCheckStatus = typeof this.tg.checkHomeScreenStatus === 'function';
-      const hasAddToHome = typeof this.tg.addToHomeScreen === 'function';
-      
-      this.debugLog('[AddToHome] checkHomeScreenStatus exists:', hasCheckStatus);
-      this.debugLog('[AddToHome] addToHomeScreen exists:', hasAddToHome);
-      
-      await this.showAlert(`Шаг 2:\ncheckStatus: ${hasCheckStatus}\naddToHome: ${hasAddToHome}`);
-      
-      // Если метод addToHomeScreen доступен - просто вызываем его
-      // checkHomeScreenStatus не работает надёжно на всех устройствах
-      if (hasAddToHome) {
-        this.debugLog('[AddToHome] Calling addToHomeScreen directly');
-        await this.showAlert('Шаг 3: Вызываем addToHomeScreen...');
-        this.addToHomeScreen();
-        await this.showAlert('✅ Функция вызвана!\n\nЕсли ничего не произошло, используйте ручную инструкцию.');
-        
-        // Показываем инструкцию на всякий случай
-        setTimeout(async () => {
-          const result = await this.showConfirm('Бот добавлен на главный экран?\n\nЕсли нет - покажем инструкцию.');
-          if (!result) {
-            await this.showAddToHomeInstructions();
-          }
-        }, 1000);
-        
-        return;
-      }
-      
-      // Если метод недоступен - показываем инструкцию
-      this.debugLog('[AddToHome] addToHomeScreen not available');
-      await this.showAlert('Методы недоступны');
-      await this.showAddToHomeInstructions();
-    } catch (error) {
-      await this.showAlert('ОШИБКА: ' + error.message);
-      console.error('[AddToHome] Error:', error);
-    }
-  }
-
-  /**
-   * Показать инструкцию по добавлению на главный экран
-   */
-  async showAddToHomeInstructions() {
-    const platform = this.getPlatform();
-    let message = '';
-
-    if (platform === 'ios') {
-      message = `📱 Инструкция для iOS:\n\n1. Откройте бота в Safari\n2. Нажмите кнопку "Поделиться" (квадрат со стрелкой)\n3. Выберите "На экран Домой"\n4. Нажмите "Добавить"`;
-    } else if (platform === 'android') {
-      message = `📱 Инструкция для Android:\n\n1. Откройте меню браузера (три точки)\n2. Выберите "Добавить на главный экран"\n3. Подтвердите добавление`;
-    } else {
-      message = `📱 Как добавить на главный экран:\n\nК сожалению, ваше устройство не поддерживает автоматическое добавление.\n\nВы можете добавить бота вручную через настройки браузера:\n• Найдите опцию "Добавить на главный экран"\n• Или создайте закладку для быстрого доступа`;
-    }
-
-    await this.showPopup({
-      title: 'Добавить на главный экран',
-      message: message,
-      buttons: [{ type: 'ok', text: 'Понятно' }]
-    });
-  }
 }
 
 // Создаём и экспортируем экземпляр
@@ -519,7 +396,5 @@ export const {
   hapticError,
   close,
   openLink,
-  openTelegramLink,
-  addToHomeScreen,
-  checkHomeScreenStatus
+  openTelegramLink
 } = telegramService;

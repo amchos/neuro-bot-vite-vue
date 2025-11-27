@@ -3,20 +3,16 @@ import { useRouter } from 'vue-router'
 import ProBanner from '@/components/ProBanner.vue'
 import neuroSettingsIcon from '@/assets/icons/neuro-settings-icon.svg'
 import historyIcon from '@/assets/icons/history-main-icon.svg'
-import addHomeIcon from '@/assets/icons/add-home-icon.svg'
 import botChannelIcon from '@/assets/icons/bot-channel-icon.svg'
 import newsChannelIcon from '@/assets/icons/referal-menu-icon.svg'
 import supportIcon from '@/assets/icons/support-icon.svg'
 import settingsArrowIcon from '@/assets/icons/settings-arrow-icon.svg'
-
-import telegramService from '@/services/telegram'
 
 const router = useRouter()
 
 const menuItems = [
   { id: 'settings', title: 'Настройки нейросети', icon: neuroSettingsIcon, route: '/settings' },
   { id: 'history', title: 'История операций', icon: historyIcon, route: '/history' },
-  { id: 'add-home', title: 'Добавить на экран "Домой"', icon: addHomeIcon, action: 'addToHome' },
   { id: 'channel', title: 'Канал бота', icon: botChannelIcon, url: 'https://t.me/bot_channel' },
   { id: 'news', title: 'Новостной канал про нейросети', icon: newsChannelIcon, url: 'https://t.me/canrobots' },
   { id: 'support', title: 'Поддержка', icon: supportIcon, url: 'https://t.me/support' }
@@ -27,22 +23,11 @@ const footerItems = [
   { id: 'privacy', title: 'Политика конфиденциальности', url: '/privacy' }
 ]
 
-const handleItemClick = async (item) => {
+const handleItemClick = (item) => {
   if (item.route) {
     router.push(item.route)
   } else if (item.url) {
     window.open(item.url, '_blank')
-  } else if (item.action === 'addToHome') {
-    try {
-      // Показываем alert и ждём его закрытия
-      await telegramService.showAlert('Кнопка нажата! Начинаем проверку...')
-      
-      // Теперь вызываем основную функцию
-      await telegramService.addToHomeScreenWithFallback()
-    } catch (error) {
-      console.error('[MenuView] Error:', error)
-      await telegramService.showAlert('Произошла ошибка: ' + error.message)
-    }
   }
 }
 </script>
