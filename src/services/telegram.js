@@ -293,22 +293,6 @@ class TelegramService {
   /**
    * Открыть Telegram ссылку
    */
-  openTelegramLink(url) {
-    this.tg?.openTelegramLink(url);
-  }
-
-  /**
-   * Отправить данные боту
-   */
-  sendData(data) {
-    this.tg?.sendData(JSON.stringify(data));
-  }
-
-  // ===== ДОПОЛНИТЕЛЬНЫЕ МЕТОДЫ =====
-  
-  /**
-   * Проверить, запущено ли приложение в Telegram
-   */
   isInTelegram() {
     return this.isAvailable;
   }
@@ -363,6 +347,21 @@ class TelegramService {
   off(eventName, callback) {
     this.tg?.offEvent(eventName, callback);
   }
+  // ===== ДОБАВЛЕНИЕ НА ГЛАВНЫЙ ЭКРАН =====
+
+  /**
+   * Добавить на главный экран
+   */
+  addToHomeScreen() {
+    this.tg?.addToHomeScreen();
+  }
+
+  /**
+   * Проверить статус добавления на главный экран
+   */
+  checkHomeScreenStatus(callback) {
+    this.tg?.checkHomeScreenStatus(callback);
+  }
 }
 
 // Создаём и экспортируем экземпляр
@@ -386,5 +385,7 @@ export const {
   hapticError,
   close,
   openLink,
-  openTelegramLink
+  openTelegramLink,
+  addToHomeScreen,
+  checkHomeScreenStatus
 } = telegramService;

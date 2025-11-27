@@ -9,6 +9,8 @@ import newsChannelIcon from '@/assets/icons/referal-menu-icon.svg'
 import supportIcon from '@/assets/icons/support-icon.svg'
 import settingsArrowIcon from '@/assets/icons/settings-arrow-icon.svg'
 
+import telegramService from '@/services/telegram'
+
 const router = useRouter()
 
 const menuItems = [
@@ -31,8 +33,8 @@ const handleItemClick = (item) => {
     console.log('Navigate to', item.route)
   } else if (item.url) {
     window.open(item.url, '_blank')
-  } else if (item.action) {
-    console.log('Action:', item.action)
+  } else if (item.action === 'addToHome') {
+    telegramService.addToHomeScreen()
   }
 }
 </script>
