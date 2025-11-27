@@ -467,9 +467,28 @@ class TelegramService {
       await this.showAlert('Шаг 3: Проверяем статус...');
       
       return new Promise((resolve) => {
+        let timeoutId;
+        let callbackCalled = false;
+        
+        // Устанавливаем таймаут на 2 секунды
+        timeoutId = setTimeout(async () => {
+          if (!callbackCalled) {
+            callbackCalled = true;
+            await this.showAlert('Шаг 3.5: Таймаут! Вызываем напрямую...');
+            this.debugLog('[AddToHome] Timeout - calling directly');
+            this.addToHomeScreen();
+            await this.showAlert('Функция вызвана! Проверьте результат.');
+            resolve(true);
+          }
+        }, 2000);
+        
         this.checkHomeScreenStatus(async (status) => {
-          this.debugLog('[AddToHome] Status:', status);
+          if (callbackCalled) return; // Игнорируем если уже обработали через таймаут
           
+          callbackCalled = true;
+          clearTimeout(timeoutId);
+          
+          this.debugLog('[AddToHome] Status:', status);
           await this.showAlert(`Шаг 4: Статус = ${status}`);
           
           if (status === 'unsupported') {
