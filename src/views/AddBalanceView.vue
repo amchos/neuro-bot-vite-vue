@@ -158,7 +158,6 @@ const handleBuy = () => {
 }
 
 .content {
-  padding: 0 16px;
   flex: 1;
 }
 
@@ -183,7 +182,7 @@ const handleBuy = () => {
 .token-card {
   display: flex;
   align-items: center;
-  height: 75px;
+  height: 66px;
   background: #2c2c2e;
   border-radius: 16px;
   padding: 11px 5px;
@@ -236,7 +235,7 @@ const handleBuy = () => {
 }
 
 .token-amount {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: white;
 }
