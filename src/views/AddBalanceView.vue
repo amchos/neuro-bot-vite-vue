@@ -104,6 +104,7 @@ const handleBuy = () => {
                 <div class="token-icon-small">
                   <img :src="balanceIcon" alt="Token" width="100%" height="100%" />
                 </div>
+                <span class="token-amount-text"> жетонов</span>
               </div>
               <div class="token-price">{{ pkg.price }} ₽</div>
             </div>
@@ -135,6 +136,13 @@ const handleBuy = () => {
 </template>
 
 <style scoped>
+
+.token-amount-text {
+
+  font-size: 0.6rem;
+  color: #8E8E93;
+}
+
 .add-balance-page {
   min-height: 100vh;
   background-color: #1c1c1e;
