@@ -142,7 +142,7 @@ const handleBuy = () => {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding-bottom: 80px; /* Space for button */
+  padding: 16px 16px 80px 16px;
 }
 
 .header {
