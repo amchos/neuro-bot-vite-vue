@@ -18,6 +18,11 @@ const showAddToHome = ref(false)
 // Проверяем поддержку при монтировании
 onMounted(() => {
   showAddToHome.value = telegramService.isAddToHomeSupported()
+  
+  // Show back button to go back to Home
+  telegramService.showBackButton(() => {
+    router.push('/')
+  })
 })
 
 const menuItems = [
