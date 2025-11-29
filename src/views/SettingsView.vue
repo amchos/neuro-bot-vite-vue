@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import apiService from '@/services/api';
 import telegramService from '@/services/telegram';
 
@@ -19,6 +19,8 @@ const styles = [
   { id: 'concise', label: 'Лаконичный', description: 'краткие и сжатые ответы по сути' },
   { id: 'formal', label: 'Официальный', description: 'чёткие и хорошо структурированные ответы' }
 ];
+
+const initialSettings = ref(null);
 
 const fetchSettings = async () => {
   isLoading.value = true;
@@ -50,6 +52,13 @@ const fetchSettings = async () => {
       instructions.value = data.instructions || '';
       selectedStyle.value = data.style || 'ordinary';
     }
+
+    // Save initial state for comparison
+    initialSettings.value = {
+      name: name.value,
+      instructions: instructions.value,
+      style: selectedStyle.value
+    };
   } catch (err) {
     console.error('Failed to fetch settings:', err);
     error.value = 'Не удалось загрузить настройки';
@@ -76,6 +85,9 @@ const saveSettings = async () => {
       await apiService.updateSettings(settings);
     }
     
+    // Update initial settings to match saved state
+    initialSettings.value = { ...settings };
+    
     // Optional: Show success message or navigate back
     // router.push('/menu'); 
   } catch (err) {
@@ -86,8 +98,65 @@ const saveSettings = async () => {
   }
 };
 
+const hasUnsavedChanges = computed(() => {
+  if (!initialSettings.value) return false;
+  return name.value !== initialSettings.value.name ||
+         instructions.value !== initialSettings.value.instructions ||
+         selectedStyle.value !== initialSettings.value.style;
+});
+
+watch(hasUnsavedChanges, (newValue) => {
+  if (newValue) {
+    telegramService.enableClosingConfirmation();
+  } else {
+    telegramService.disableClosingConfirmation();
+  }
+});
+
+const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
+  telegramService.showPopup({
+    title: 'Несохраненные изменения',
+    message: 'У вас есть несохраненные изменения. Сохранить их перед выходом?',
+    buttons: [
+      { id: 'save', type: 'default', text: 'Сохранить' },
+      { id: 'discard', type: 'destructive', text: 'Оставить как есть' },
+      { id: 'cancel', type: 'cancel', text: 'Отмена' }
+    ]
+  }).then(async (buttonId) => {
+    if (buttonId === 'save') {
+      await saveSettings();
+      if (!error.value) {
+        onConfirm();
+      }
+    } else if (buttonId === 'discard') {
+      onDiscard();
+    }
+  });
+};
+
+const handleBackClick = () => {
+  router.back();
+};
+
 onMounted(() => {
   fetchSettings();
+  telegramService.showBackButton(handleBackClick);
+});
+
+onUnmounted(() => {
+  telegramService.disableClosingConfirmation();
+  telegramService.hideBackButton();
+});
+
+onBeforeRouteLeave((to, from, next) => {
+  if (hasUnsavedChanges.value) {
+    showUnsavedChangesPopup(
+      () => next(),
+      () => next()
+    );
+  } else {
+    next();
+  }
 });
 </script>
 

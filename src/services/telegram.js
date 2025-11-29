@@ -34,6 +34,20 @@ class TelegramService {
     this.applyTheme();
   }
 
+  /**
+   * Включить подтверждение закрытия
+   */
+  enableClosingConfirmation() {
+    this.tg?.enableClosingConfirmation();
+  }
+
+  /**
+   * Выключить подтверждение закрытия
+   */
+  disableClosingConfirmation() {
+    this.tg?.disableClosingConfirmation();
+  }
+
   // ===== ДАННЫЕ ПОЛЬЗОВАТЕЛЯ =====
   
   /**
@@ -419,5 +433,7 @@ export const {
   hapticError,
   close,
   openLink,
-  openTelegramLink
+  openTelegramLink,
+  enableClosingConfirmation,
+  disableClosingConfirmation
 } = telegramService;
