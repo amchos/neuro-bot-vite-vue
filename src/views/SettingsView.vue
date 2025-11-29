@@ -128,7 +128,7 @@ watch(hasUnsavedChanges, (newValue) => {
   }
 });
 
-const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
+const showUnsavedChangesPopup = (onConfirm, onDiscard, onCancel) => {
   console.log('Showing unsaved changes popup');
   telegramService.showPopup({
     title: 'Несохраненные изменения',
@@ -144,9 +144,15 @@ const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
       await saveSettings();
       if (!error.value) {
         onConfirm();
+      } else {
+        // If save failed, we should probably cancel navigation so user can fix it
+        if (onCancel) onCancel();
       }
     } else if (buttonId === 'discard') {
       onDiscard();
+    } else {
+      // Cancel or close
+      if (onCancel) onCancel();
     }
   });
 };
@@ -178,6 +184,10 @@ onBeforeRouteLeave((to, from, next) => {
       () => {
         console.log('Discarded changes, proceeding navigation');
         next();
+      },
+      () => {
+        console.log('Cancelled navigation');
+        next(false);
       }
     );
   } else {
