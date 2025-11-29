@@ -226,6 +226,14 @@ onBeforeRouteLeave((to, from, next) => {
       </button>
 
       <div v-if="error" class="error-message">{{ error }}</div>
+
+      <!-- DEBUG INFO -->
+      <div style="margin-top: 20px; padding: 10px; background: #333; font-size: 10px; font-family: monospace;">
+        <p>Has Unsaved Changes: {{ hasUnsavedChanges }}</p>
+        <p>Name: '{{ name }}' (Initial: '{{ initialSettings?.name }}')</p>
+        <p>Instructions: '{{ instructions }}' (Initial: '{{ initialSettings?.instructions }}')</p>
+        <p>Style: '{{ selectedStyle }}' (Initial: '{{ initialSettings?.style }}')</p>
+      </div>
     </div>
   </div>
 </template>
