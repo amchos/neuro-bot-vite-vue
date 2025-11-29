@@ -227,7 +227,6 @@ const onMouseMove = (e) => {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
   gap: 16px;
-  padding: 0 16px;
   align-items: center;
   cursor: grab;
   user-select: none;
