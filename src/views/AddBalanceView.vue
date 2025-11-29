@@ -243,7 +243,7 @@ const handleBuy = () => {
 }
 
 .token-amount {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: white;
 }
