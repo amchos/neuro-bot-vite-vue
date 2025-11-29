@@ -25,18 +25,21 @@ const initialSettings = ref(null);
 const fetchSettings = async () => {
   isLoading.value = true;
   error.value = null;
+  console.log('fetchSettings started. DEV mode:', import.meta.env.DEV);
   
   try {
     if (import.meta.env.DEV) {
-      // Mock data
+      console.log('Using mock data for settings');
       name.value = 'Пользователь';
       instructions.value = '';
       selectedStyle.value = 'ordinary';
     } else {
+      console.log('Fetching settings from API...');
       const data = await apiService.getSettings();
+      console.log('API Response:', data);
       
       // If name is empty, try to get from Telegram
-      if (!data.name && telegramService.isAvailable) {
+      if (!data?.name && telegramService.isAvailable) {
         const tgUser = telegramService.getUser();
         if (tgUser) {
           const firstName = tgUser.first_name || '';
@@ -46,24 +49,29 @@ const fetchSettings = async () => {
           name.value = '';
         }
       } else {
-        name.value = data.name || '';
+        name.value = data?.name || '';
       }
       
-      instructions.value = data.instructions || '';
-      selectedStyle.value = data.style || 'ordinary';
+      instructions.value = data?.instructions || '';
+      selectedStyle.value = data?.style || 'ordinary';
     }
-
-    // Save initial state for comparison
+  } catch (err) {
+    console.error('Failed to fetch settings:', err);
+    error.value = 'Не удалось загрузить настройки';
+    
+    // Even on error, we should probably set initial values to current (empty) 
+    // so that we don't block navigation if they just leave.
+    // OR we can leave it as null to indicate "not loaded".
+    // But if we want to allow editing "from scratch" even if load failed:
+  } finally {
+    // Always set initial settings to what we have now, 
+    // so that "no changes" is the baseline state.
     initialSettings.value = {
       name: name.value,
       instructions: instructions.value,
       style: selectedStyle.value
     };
-    console.log('Initial settings loaded:', initialSettings.value);
-  } catch (err) {
-    console.error('Failed to fetch settings:', err);
-    error.value = 'Не удалось загрузить настройки';
-  } finally {
+    console.log('Initial settings set to:', initialSettings.value);
     isLoading.value = false;
   }
 };
