@@ -91,7 +91,7 @@ const handleInvite = () => {
   color: white;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 16px;
   box-sizing: border-box;
 }
 
@@ -202,7 +202,7 @@ const handleInvite = () => {
   text-align: center;
   font-size: 13px;
   color: #8E8E93;
-  padding-bottom: 20px;
+  padding: 20px 0;
   margin-top: auto;
 }
 </style>

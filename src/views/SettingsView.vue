@@ -157,21 +157,7 @@ const showUnsavedChangesPopup = (onConfirm, onDiscard, onCancel) => {
   });
 };
 
-const backClickCount = ref(0);
-
 const handleBackClick = () => {
-  backClickCount.value++;
-  console.log('Back button clicked. Count:', backClickCount.value);
-  router.back();
-};
-
-const forceGoBack = () => {
-  console.log('Force going back (router.back)');
-  router.back();
-};
-
-const forcePushMenu = () => {
-  console.log('Force pushing menu (router.push)');
   router.push('/menu');
 };
 
@@ -257,19 +243,6 @@ onBeforeRouteLeave((to, from, next) => {
       </button>
 
       <div v-if="error" class="error-message">{{ error }}</div>
-
-      <!-- DEBUG INFO -->
-      <div style="margin-top: 20px; padding: 10px; background: #333; font-size: 10px; font-family: monospace;">
-        <p>Has Unsaved Changes: {{ hasUnsavedChanges }}</p>
-        <p>Back Click Count: {{ backClickCount }}</p>
-        <div style="margin-top: 5px; display: flex; gap: 5px;">
-          <button @click="forceGoBack" style="padding: 5px; background: #555; border: none; color: white;">Force Back</button>
-          <button @click="forcePushMenu" style="padding: 5px; background: #555; border: none; color: white;">Force Menu</button>
-        </div>
-        <p>Name: '{{ name }}' (Initial: '{{ initialSettings?.name }}')</p>
-        <p>Instructions: '{{ instructions }}' (Initial: '{{ initialSettings?.instructions }}')</p>
-        <p>Style: '{{ selectedStyle }}' (Initial: '{{ initialSettings?.style }}')</p>
-      </div>
     </div>
   </div>
 </template>

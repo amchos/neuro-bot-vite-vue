@@ -204,10 +204,11 @@ const onMouseMove = (e) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 16px;
 }
 
 .header {
-  padding: 20px;
+  padding: 16px 0;
   text-align: center;
   flex-shrink: 0;
 }
