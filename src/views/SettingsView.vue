@@ -59,6 +59,7 @@ const fetchSettings = async () => {
       instructions: instructions.value,
       style: selectedStyle.value
     };
+    console.log('Initial settings loaded:', initialSettings.value);
   } catch (err) {
     console.error('Failed to fetch settings:', err);
     error.value = 'Не удалось загрузить настройки';
@@ -100,12 +101,18 @@ const saveSettings = async () => {
 
 const hasUnsavedChanges = computed(() => {
   if (!initialSettings.value) return false;
-  return name.value !== initialSettings.value.name ||
-         instructions.value !== initialSettings.value.instructions ||
-         selectedStyle.value !== initialSettings.value.style;
+  const isDirty = name.value !== initialSettings.value.name ||
+                  instructions.value !== initialSettings.value.instructions ||
+                  selectedStyle.value !== initialSettings.value.style;
+  console.log('hasUnsavedChanges:', isDirty, {
+    current: { name: name.value, instructions: instructions.value, style: selectedStyle.value },
+    initial: initialSettings.value
+  });
+  return isDirty;
 });
 
 watch(hasUnsavedChanges, (newValue) => {
+  console.log('Unsaved changes state changed:', newValue);
   if (newValue) {
     telegramService.enableClosingConfirmation();
   } else {
@@ -114,6 +121,7 @@ watch(hasUnsavedChanges, (newValue) => {
 });
 
 const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
+  console.log('Showing unsaved changes popup');
   telegramService.showPopup({
     title: 'Несохраненные изменения',
     message: 'У вас есть несохраненные изменения. Сохранить их перед выходом?',
@@ -123,6 +131,7 @@ const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
       { id: 'cancel', type: 'cancel', text: 'Отмена' }
     ]
   }).then(async (buttonId) => {
+    console.log('Popup button clicked:', buttonId);
     if (buttonId === 'save') {
       await saveSettings();
       if (!error.value) {
@@ -135,6 +144,7 @@ const showUnsavedChangesPopup = (onConfirm, onDiscard) => {
 };
 
 const handleBackClick = () => {
+  console.log('Back button clicked');
   router.back();
 };
 
@@ -149,12 +159,21 @@ onUnmounted(() => {
 });
 
 onBeforeRouteLeave((to, from, next) => {
+  console.log('onBeforeRouteLeave triggered');
   if (hasUnsavedChanges.value) {
+    console.log('Preventing navigation due to unsaved changes');
     showUnsavedChangesPopup(
-      () => next(),
-      () => next()
+      () => {
+        console.log('Confirmed save, proceeding navigation');
+        next();
+      },
+      () => {
+        console.log('Discarded changes, proceeding navigation');
+        next();
+      }
     );
   } else {
+    console.log('No unsaved changes, proceeding navigation');
     next();
   }
 });
