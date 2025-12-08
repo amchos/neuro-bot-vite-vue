@@ -3,7 +3,7 @@ import telegramService from './telegram';
 
 // Создаём экземпляр axios с базовой конфигурацией
 const api = axios.create({
-    baseURL: 'promptly.freedynamicdns.org',
+    baseURL: 'https://promptly.freedynamicdns.org',
     headers: {
         'Content-Type': 'application/json',
     },
