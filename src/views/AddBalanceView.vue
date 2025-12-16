@@ -242,11 +242,11 @@ const handlePayCard = (pkg) => {
 
 @keyframes flame-sway {
   0%, 100% {
-    transform: scale(1) rotate(-2deg);
+    transform: scale(1);
     filter: brightness(100%) hue-rotate(0deg);
   }
   50% {
-    transform: scale(1.1) rotate(2deg);
+    transform: scale(1.1);
     filter: brightness(110%) hue-rotate(-20deg) saturate(1.5); /* Shift towards red and intensify */
   }
 }
