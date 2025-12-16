@@ -174,7 +174,7 @@ const handlePayCard = (pkg) => {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 16px 16px 80px 16px;
+  padding: 16px 16px 90px 16px;
 }
 
 .header {

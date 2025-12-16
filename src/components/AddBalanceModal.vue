@@ -16,18 +16,34 @@ const touchCurrentY = ref(0)
 const modalTranslateY = ref(0)
 const isDragging = ref(false)
 
+const scrollPosition = ref(0)
+
 // Reset translate when modal opens
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {
     modalTranslateY.value = 0
-    document.body.style.overflow = 'hidden'
+    scrollPosition.value = window.scrollY
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollPosition.value}px`
+    document.body.style.width = '100%'
+    document.body.style.overflowY = 'scroll'
   } else {
-    document.body.style.overflow = ''
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.width = ''
+    document.body.style.overflowY = ''
+    window.scrollTo(0, scrollPosition.value)
   }
 })
 
 onUnmounted(() => {
-  document.body.style.overflow = ''
+  if (props.isOpen) {
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.width = ''
+    document.body.style.overflowY = ''
+    window.scrollTo(0, scrollPosition.value)
+  }
 })
 
 const onTouchStart = (e) => {
