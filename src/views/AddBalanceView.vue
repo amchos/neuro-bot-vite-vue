@@ -20,7 +20,7 @@ const tokenPackages = [
     id: 'tokens-110',
     amount: 110,
     description: 'хватит на ≈55 — 110 ответов нейросети',
-    price: 600,
+    price: 700,
     pricePerToken: 23,
     icon: 'balance',
     isPopular: false
@@ -29,7 +29,7 @@ const tokenPackages = [
     id: 'tokens-230',
     amount: 230,
     description: 'хватит на ≈115 — 230 ответов нейросети',
-    price: 600,
+    price: 800,
     pricePerToken: 23,
     icon: 'balance',
     isPopular: false
@@ -38,7 +38,7 @@ const tokenPackages = [
     id: 'tokens-480',
     amount: 480,
     description: 'хватит на ≈240 — 480 ответов нейросети',
-    price: 600,
+    price: 900,
     pricePerToken: 23,
     icon: 'fire',
     isPopular: true
@@ -47,14 +47,19 @@ const tokenPackages = [
     id: 'tokens-1000',
     amount: 1000,
     description: 'хватит на ≈500 — 1000 ответов нейросети',
-    price: 600,
+    price: 1000,
     pricePerToken: 23,
     icon: 'balance',
     isPopular: false
   }
 ]
 
+import AddBalanceModal from '@/components/AddBalanceModal.vue'
+
+// ... existing imports
+
 const selectedPackage = ref(null)
+const isPaymentModalOpen = ref(false)
 
 const selectPackage = (pkg) => {
   selectedPackage.value = pkg
@@ -62,9 +67,20 @@ const selectPackage = (pkg) => {
 
 const handleBuy = () => {
   if (selectedPackage.value) {
-    console.log('Buying package:', selectedPackage.value)
-    // Implement buy logic here
+    isPaymentModalOpen.value = true
   }
+}
+
+const handlePayStars = (pkg) => {
+    console.log('Paying with stars:', pkg)
+    // Implement Stars payment logic here
+    isPaymentModalOpen.value = false
+}
+
+const handlePayCard = (pkg) => {
+    console.log('Paying with card:', pkg)
+    // Implement Card payment logic here
+    isPaymentModalOpen.value = false
 }
 </script>
 
@@ -132,6 +148,14 @@ const handleBuy = () => {
         </button>
       </Transition>
     </div>
+
+    <AddBalanceModal 
+      :is-open="isPaymentModalOpen" 
+      :package="selectedPackage"
+      @close="isPaymentModalOpen = false"
+      @pay-stars="handlePayStars"
+      @pay-card="handlePayCard"
+    />
   </div>
 </template>
 
@@ -212,6 +236,19 @@ const handleBuy = () => {
 .fire-icon-img {
     width: 100%;
     height: 100%;
+    animation: flame-sway 2s infinite ease-in-out;
+    transform-origin: center bottom;
+}
+
+@keyframes flame-sway {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+    filter: brightness(100%) hue-rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+    filter: brightness(110%) hue-rotate(-20deg) saturate(1.5); /* Shift towards red and intensify */
+  }
 }
 
 .card-content-wrapper {
